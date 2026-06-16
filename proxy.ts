@@ -30,16 +30,20 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const { pathname } = request.nextUrl
-  const isLoginPath = pathname === '/login'
   const isRootPath = pathname === '/'
+  const isPublicPath =
+    pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/suscripcion' ||
+    pathname.startsWith('/receta/')
 
-  if (!user && !isLoginPath) {
+  if (!user && !isPublicPath) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  if (user && (isLoginPath || isRootPath)) {
+  if (user && (pathname === '/login' || pathname === '/signup' || isRootPath)) {
     const url = request.nextUrl.clone()
     url.pathname = '/pacientes'
     return NextResponse.redirect(url)
@@ -49,5 +53,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|sw\\.js|manifest\\.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }
