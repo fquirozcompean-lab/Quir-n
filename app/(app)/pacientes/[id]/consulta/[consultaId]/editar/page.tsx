@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import ConsultationForm from '@/components/ConsultationForm'
 import { updateConsultationAction } from '@/app/(app)/pacientes/[id]/nueva-consulta/actions'
+import { getDoctorProfile } from '@/lib/doctor-profile'
 
 export default async function EditConsultaPage({
   params,
@@ -12,9 +13,10 @@ export default async function EditConsultaPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: patient }, { data: consulta }] = await Promise.all([
+  const [{ data: patient }, { data: consulta }, profile] = await Promise.all([
     supabase.from('patients').select('nombre, consultorio').eq('id', id).eq('user_id', user!.id).single(),
     supabase.from('consultations').select('*').eq('id', consultaId).eq('user_id', user!.id).single(),
+    getDoctorProfile(),
   ])
 
   if (!patient || !consulta) notFound()
@@ -35,6 +37,10 @@ export default async function EditConsultaPage({
         defaultConsultorio={patient.consultorio}
         action={boundAction}
         isEdit
+        catDx={profile?.cat_dx ?? []}
+        catTx={profile?.cat_tx ?? []}
+        catEst={profile?.cat_est ?? []}
+        consultorios={profile?.consultorios ?? {}}
         initialData={{
           fecha:              consulta.fecha,
           consultorio:        consulta.consultorio,

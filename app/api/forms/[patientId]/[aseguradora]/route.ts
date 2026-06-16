@@ -3,12 +3,12 @@ import { PDFDocument, PDFForm } from 'pdf-lib'
 import fs from 'fs'
 import path from 'path'
 import { createClient } from '@/lib/supabase/server'
-import { DOCTOR } from '@/lib/doctor'
+import { getDoctorProfile } from '@/lib/doctor-profile'
 import { calcAge } from '@/lib/utils'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
-function set(form: PDFForm, name: string, value: string) {
+function set(form: PDFForm, name: string, value: string | null | undefined) {
   try { form.getTextField(name).setText(value || '') } catch {}
 }
 function check(form: PDFForm, name: string, yes: boolean) {
@@ -45,13 +45,14 @@ export async function GET(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return new NextResponse('Unauthorized', { status: 401 })
 
-  const [{ data: patient }, { data: consult }] = await Promise.all([
+  const [{ data: patient }, { data: consult }, profile] = await Promise.all([
     supabase.from('patients').select('*').eq('id', patientId).eq('user_id', user.id).single(),
     supabase.from('consultations').select('*')
       .eq('patient_id', patientId).eq('user_id', user.id)
       .order('fecha', { ascending: false }).limit(1).maybeSingle(),
+    getDoctorProfile(),
   ])
-  if (!patient) return new NextResponse('Not found', { status: 404 })
+  if (!patient || !profile) return new NextResponse('Not found', { status: 404 })
 
   const src = consult ?? patient
 
@@ -101,17 +102,15 @@ export async function GET(
   const fr   = sv.fr   ?? ''
   const temp = sv.temp ?? ''
 
-  const cons = patient.consultorio
-    ? DOCTOR.consultorios[patient.consultorio as 'Muguerza' | 'Angeles'] ?? null
-    : null
-  const hospital  = (cons?.hospital     ?? 'CHRISTUS MUGUERZA ALTAGRACIA').toUpperCase()
-  const ciudad    = (cons?.ciudad       ?? 'LEÓN').toUpperCase()
-  const estado    = (cons?.estado       ?? 'GUANAJUATO').toUpperCase()
+  const cons = patient.consultorio ? profile.consultorios[patient.consultorio] ?? null : null
+  const hospital  = (cons?.hospital     ?? '').toUpperCase()
+  const ciudad    = (cons?.ciudad       ?? profile.ciudad ?? '').toUpperCase()
+  const estado    = (cons?.estado       ?? '').toUpperCase()
   const tel_cons  = cons?.telefono ?? ''
   const lugarFecha = `${ciudad}, ${estado} ${fmt(fcons)}`
 
   // Doctor shorthand
-  const D = DOCTOR
+  const D = profile
   const docNombre = `${D.apellido1} ${D.apellido2} ${D.nombres}`
   const docNombreInv = `${D.nombres} ${D.apellido1} ${D.apellido2}`
 
@@ -230,7 +229,7 @@ export async function GET(
     set(form, 'Especialidad_3', D.especialidad)
     set(form, 'Domiclio consultorio', cons ? `${cons.consultorio}, ${hospital}` : hospital)
     set(form, 'Teléfono del consultorio', tel_cons || D.celular)
-    set(form, 'Cédula profesional especialidad_5', `${D.cedula_prof} / ${D.cedula_esp}`)
+    set(form, 'Cédula profesional especialidad_5', `${D.cedula_prof} / ${D.cedula_esp ?? ''}`)
     set(form, 'Número celular_5', D.celular)
     set(form, 'Registro Federal de Contribuyentes_5', D.rfc)
     set(form, 'Correo electrónico_5', D.email_seguros)

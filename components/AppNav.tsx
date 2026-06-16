@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { logoutAction } from '@/app/login/actions'
 import InstallButton from './InstallButton'
-import { DOCTOR } from '@/lib/doctor'
+import type { Procedimiento } from '@/lib/types'
 
 const BASE_NAV = [
   { href: '/pacientes', label: 'Pacientes'     },
@@ -13,26 +13,33 @@ const BASE_NAV = [
 ]
 
 const EXTRA_NAV = [
-  { href: '/cierre',   label: 'Cierre del día' },
-  { href: '/exportar', label: 'Exportar'       },
+  { href: '/cierre',       label: 'Cierre del día' },
+  { href: '/exportar',     label: 'Exportar'       },
+  { href: '/configuracion', label: 'Configuración' },
 ]
 
-const NAV_ITEMS = [
-  ...BASE_NAV,
-  ...(DOCTOR.procedimiento.mostrar
-    ? [{ href: DOCTOR.procedimiento.href, label: DOCTOR.procedimiento.label }]
-    : []),
-  ...EXTRA_NAV,
-]
-
-export default function AppNav() {
+export default function AppNav({
+  nombreCorto,
+  procedimiento,
+}: {
+  nombreCorto: string
+  procedimiento: Procedimiento | null
+}) {
   const pathname = usePathname()
+
+  const NAV_ITEMS = [
+    ...BASE_NAV,
+    ...(procedimiento?.mostrar
+      ? [{ href: procedimiento.href, label: procedimiento.label }]
+      : []),
+    ...EXTRA_NAV,
+  ]
 
   return (
     <>
       <header className="bg-navy text-white px-4 py-3 flex items-center gap-2 sticky top-0 z-10">
-        <span className="font-extrabold text-lg tracking-tight">{DOCTOR.appName}</span>
-        <span className="ml-auto text-xs opacity-80">{DOCTOR.nombreCorto}</span>
+        <span className="font-extrabold text-lg tracking-tight">Quirón</span>
+        <span className="ml-auto text-xs opacity-80">{nombreCorto}</span>
         <InstallButton />
         <form action={logoutAction} className="ml-3">
           <button

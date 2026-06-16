@@ -1,15 +1,14 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import RegisterSW from '@/components/RegisterSW'
-import { DOCTOR } from '@/lib/doctor'
 
 export const metadata: Metadata = {
-  title: DOCTOR.appName,
-  description: `Expedientes clínicos — ${DOCTOR.loginSubtitulo}`,
+  title: 'Quirón',
+  description: 'Expedientes clínicos para consultorios médicos',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    title: DOCTOR.appName,
+    title: 'Quirón',
     statusBarStyle: 'black-translucent',
   },
   icons: {

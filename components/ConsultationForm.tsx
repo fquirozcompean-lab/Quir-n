@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
 import { ChipSelector } from './ChipSelector'
-import { CAT_DX, CAT_TX, CAT_EST } from '@/lib/catalogs'
+import type { Consultorio } from '@/lib/types'
 
 type ActionState = { error: string } | undefined
 type ConsultAction = (prev: ActionState, formData: FormData) => Promise<ActionState>
@@ -24,6 +24,10 @@ interface Props {
   action: ConsultAction
   initialData?: InitialData
   isEdit?: boolean
+  catDx: string[]
+  catTx: string[]
+  catEst: string[]
+  consultorios: Record<string, Consultorio>
 }
 
 const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
@@ -63,7 +67,7 @@ function VitalField({ name, label, defaultValue: dv, unit }: { name: string; lab
 const EXP_F = 'A la exploración física se encuentra paciente alerta, orientada, cooperadora, adecuado estado de hidratación y coloración de tegumentos, cardiopulmonar sin alteraciones, abdomen globoso a expensas de panículo adiposo, blando, depresible, no doloroso a la palpación, sin datos de irritación peritoneal, extremidades integras sin alteraciones.'
 const EXP_M = 'A la exploración física se encuentra paciente alerta, orientado, cooperador, adecuado estado de hidratación y coloración de tegumentos, cardiopulmonar sin alteraciones, abdomen globoso a expensas de panículo adiposo, blando, depresible, no doloroso a la palpación, sin datos de irritación peritoneal, extremidades integras sin alteraciones.'
 
-export default function ConsultationForm({ patientId, patientName, defaultConsultorio, action, initialData, isEdit }: Props) {
+export default function ConsultationForm({ patientId, patientName, defaultConsultorio, action, initialData, isEdit, catDx, catTx, catEst, consultorios }: Props) {
   const [state, formAction, pending] = useActionState(action, undefined)
   const [dx, setDx]             = useState<string[]>(initialData?.dx ?? [])
   const [tx, setTx]             = useState<string[]>(initialData?.tx ?? [])
@@ -73,8 +77,8 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
 
   const today = new Date().toISOString().slice(0, 10)
 
-  const catalogDx = dx.filter(d => (CAT_DX as readonly string[]).includes(d))
-  const extraDx   = dx.filter(d => !(CAT_DX as readonly string[]).includes(d))
+  const catalogDx = dx.filter(d => catDx.includes(d))
+  const extraDx   = dx.filter(d => !catDx.includes(d))
 
   function addCustomDx() {
     const val = customDx.trim()
@@ -98,8 +102,9 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
           <Field label="Consultorio">
             <select name="consultorio" className={cls} defaultValue={initialData?.consultorio ?? defaultConsultorio ?? ''}>
               <option value="">— Sin especificar —</option>
-              <option value="Angeles">Ángeles</option>
-              <option value="Muguerza">Muguerza</option>
+              {Object.keys(consultorios).map(key => (
+                <option key={key} value={key}>{key}</option>
+              ))}
             </select>
           </Field>
           <div className="sm:col-span-2">
@@ -138,7 +143,7 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
       </SectionCard>
 
       <SectionCard title="Diagnóstico">
-        <ChipSelector catalog={CAT_DX} selected={catalogDx} onChange={sel => setDx([...sel, ...extraDx])} />
+        <ChipSelector catalog={catDx} selected={catalogDx} onChange={sel => setDx([...sel, ...extraDx])} />
         {extraDx.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {extraDx.map(d => (
@@ -170,7 +175,7 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
       </SectionCard>
 
       <SectionCard title="Tratamiento y solicitudes">
-        <ChipSelector catalog={CAT_TX} selected={tx} onChange={setTx} />
+        <ChipSelector catalog={catTx} selected={tx} onChange={setTx} />
         <div className="mt-2">
           <Field label="Indicaciones">
             <textarea name="tx_texto" className={cls} rows={3} defaultValue={initialData?.tx_texto ?? ''} />
@@ -188,7 +193,7 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
           </Field>
         </div>
         <p className="text-xs text-muted font-semibold mt-4 mb-1">Estudios solicitados</p>
-        <ChipSelector catalog={CAT_EST} selected={estudios} onChange={setEstudios} />
+        <ChipSelector catalog={catEst} selected={estudios} onChange={setEstudios} />
       </SectionCard>
 
       {state?.error && (

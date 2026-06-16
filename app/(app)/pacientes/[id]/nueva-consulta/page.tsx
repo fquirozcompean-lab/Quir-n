@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ConsultationForm from '@/components/ConsultationForm'
 import { saveConsultationAction } from './actions'
+import { getDoctorProfile } from '@/lib/doctor-profile'
 
 export default async function NuevaConsultaPage({
   params,
@@ -13,12 +14,10 @@ export default async function NuevaConsultaPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: patient } = await supabase
-    .from('patients')
-    .select('id, nombre, consultorio')
-    .eq('id', id)
-    .eq('user_id', user!.id)
-    .single()
+  const [{ data: patient }, profile] = await Promise.all([
+    supabase.from('patients').select('id, nombre, consultorio').eq('id', id).eq('user_id', user!.id).single(),
+    getDoctorProfile(),
+  ])
 
   if (!patient) notFound()
 
@@ -35,6 +34,10 @@ export default async function NuevaConsultaPage({
         patientName={patient.nombre}
         defaultConsultorio={patient.consultorio ?? undefined}
         action={saveConsultationAction}
+        catDx={profile?.cat_dx ?? []}
+        catTx={profile?.cat_tx ?? []}
+        catEst={profile?.cat_est ?? []}
+        consultorios={profile?.consultorios ?? {}}
       />
     </div>
   )

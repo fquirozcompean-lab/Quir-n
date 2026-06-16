@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppNav from '@/components/AppNav'
+import { ensureDoctorProfile, getDoctorProfile } from '@/lib/doctor-profile'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -8,9 +9,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   if (!user) redirect('/login')
 
+  await ensureDoctorProfile(user.id)
+  const profile = await getDoctorProfile()
+
+  if (profile && !['trialing', 'active'].includes(profile.subscription_status)) {
+    redirect('/suscripcion')
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
-      <AppNav />
+      <AppNav nombreCorto={profile?.nombre_corto || ''} procedimiento={profile?.procedimiento ?? null} />
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-4">
         {children}
       </main>

@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { DOCTOR } from '@/lib/doctor'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
@@ -58,12 +57,12 @@ export default function InstallButton() {
             className="bg-white rounded-t-2xl p-6 w-full space-y-4"
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="font-extrabold text-navy text-lg">Instalar {DOCTOR.appName} como app</h3>
+            <h3 className="font-extrabold text-navy text-lg">Instalar Quirón como app</h3>
             <p className="text-sm text-muted">Sigue estos pasos en Chrome:</p>
             <ol className="space-y-3 text-sm text-navy">
               <li className="flex gap-3">
                 <span className="bg-teal text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs flex-shrink-0">1</span>
-                <span>Si ya tienes un icono de {DOCTOR.appName} en la pantalla de inicio, <strong>mantenlo presionado y elimínalo</strong> primero.</span>
+                <span>Si ya tienes un icono de Quirón en la pantalla de inicio, <strong>mantenlo presionado y elimínalo</strong> primero.</span>
               </li>
               <li className="flex gap-3">
                 <span className="bg-teal text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs flex-shrink-0">2</span>
@@ -83,7 +82,7 @@ export default function InstallButton() {
               </li>
             </ol>
             <p className="text-xs text-muted bg-gray-50 rounded-lg p-3">
-              Una vez instalada correctamente, {DOCTOR.appName} aparecerá en el menú de compartir junto a WhatsApp, Gmail, etc.
+              Una vez instalada correctamente, Quirón aparecerá en el menú de compartir junto a WhatsApp, Gmail, etc.
             </p>
             <button
               onClick={() => setShowGuide(false)}

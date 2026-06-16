@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import PatientForm from '@/components/PatientForm'
 import { updatePatient } from '../../actions'
+import { getDoctorProfile } from '@/lib/doctor-profile'
 
 export default async function EditarPacientePage({
   params,
@@ -13,12 +14,10 @@ export default async function EditarPacientePage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: patient } = await supabase
-    .from('patients')
-    .select('*')
-    .eq('id', id)
-    .eq('user_id', user!.id)
-    .single()
+  const [{ data: patient }, profile] = await Promise.all([
+    supabase.from('patients').select('*').eq('id', id).eq('user_id', user!.id).single(),
+    getDoctorProfile(),
+  ])
 
   if (!patient) notFound()
 
@@ -30,7 +29,16 @@ export default async function EditarPacientePage({
         </Link>
         <h2 className="text-lg font-extrabold text-navy">Editar expediente</h2>
       </div>
-      <PatientForm initialData={patient} action={updatePatient} cancelHref={`/pacientes/${id}`} />
+      <PatientForm
+        initialData={patient}
+        action={updatePatient}
+        cancelHref={`/pacientes/${id}`}
+        catDx={profile?.cat_dx ?? []}
+        catTx={profile?.cat_tx ?? []}
+        catEst={profile?.cat_est ?? []}
+        catPosologia={profile?.cat_posologia ?? {}}
+        consultorios={profile?.consultorios ?? {}}
+      />
     </>
   )
 }

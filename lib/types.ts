@@ -77,3 +77,55 @@ export type PatientWithRelations = Patient & {
   evolution_notes?: EvolutionNote[]
   attachments?: Attachment[]
 }
+
+export interface Consultorio {
+  hospital: string
+  consultorio: string
+  telefono: string
+  ciudad: string
+  estado: string
+}
+
+export interface Procedimiento {
+  label: string
+  href: string
+  mostrar: boolean
+}
+
+export interface DoctorProfile {
+  user_id: string
+  nombre: string
+  nombre_corto: string
+  apellido1: string
+  apellido2: string
+  nombres: string
+  especialidades: string
+  especialidad: string
+  cedula_prof: string
+  cedula_esp: string | null
+  cedula_esp2: string | null
+  email: string | null
+  email_seguros: string | null
+  celular: string | null
+  rfc: string | null
+  emergencias: string | null
+  ciudad: string | null
+  login_subtitulo: string | null
+  review_url: string | null
+  logo_url: string | null
+  firma_url: string | null
+  procedimiento: Procedimiento
+  consultorios: Record<string, Consultorio>
+  cat_dx: string[]
+  cat_tx: string[]
+  cat_est: string[]
+  cat_posologia: Record<string, string>
+  onboarding_done: boolean
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
+  subscription_status: 'none' | 'trialing' | 'active' | 'past_due' | 'canceled' | 'incomplete'
+  trial_ends_at: string | null
+  current_period_end: string | null
+  created_at: string
+  updated_at: string
+}

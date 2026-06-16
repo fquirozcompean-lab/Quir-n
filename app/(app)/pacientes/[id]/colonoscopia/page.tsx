@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { DOCTOR } from '@/lib/doctor'
+import { getDoctorProfile } from '@/lib/doctor-profile'
 import ColonoscopyClient from './ColonoscopyClient'
 
 export default async function ColonoscopyPage({
@@ -12,21 +12,24 @@ export default async function ColonoscopyPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: patient } = await supabase
-    .from('patients')
-    .select('nombre, sexo, telefono')
-    .eq('id', id)
-    .eq('user_id', user!.id)
-    .single()
+  const [{ data: patient }, profile] = await Promise.all([
+    supabase.from('patients').select('nombre, sexo, telefono').eq('id', id).eq('user_id', user!.id).single(),
+    getDoctorProfile(),
+  ])
 
-  if (!patient) notFound()
+  if (!patient || !profile?.procedimiento?.mostrar) notFound()
 
   return (
     <ColonoscopyClient
       patientId={id}
       patientName={patient.nombre}
       patientPhone={patient.telefono}
-      doctor={DOCTOR}
+      doctorNombre={profile.nombre}
+      cedulaProf={profile.cedula_prof}
+      cedulaEsp={profile.cedula_esp}
+      emergencias={profile.emergencias}
+      logoUrl={profile.logo_url}
+      firmaUrl={profile.firma_url}
     />
   )
 }

@@ -1,8 +1,8 @@
 'use client'
 
 import { useActionState } from 'react'
+import Link from 'next/link'
 import { loginAction } from './actions'
-import { DOCTOR } from '@/lib/doctor'
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(loginAction, undefined)
@@ -11,8 +11,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-bg px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-navy">{DOCTOR.appName}</h1>
-          <p className="text-muted text-sm mt-1">{DOCTOR.loginSubtitulo}</p>
+          <h1 className="text-3xl font-extrabold text-navy">Quirón</h1>
+          <p className="text-muted text-sm mt-1">Expedientes clínicos para tu consultorio</p>
         </div>
 
         <div className="bg-card rounded-2xl shadow-sm border border-border p-6">
@@ -62,6 +62,13 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
+
+        <p className="text-center text-sm text-muted mt-5">
+          ¿No tienes cuenta?{' '}
+          <Link href="/signup" className="text-teal font-semibold hover:underline">
+            Regístrate gratis
+          </Link>
+        </p>
       </div>
     </div>
   )

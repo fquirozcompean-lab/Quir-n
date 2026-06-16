@@ -7,7 +7,12 @@ interface Props {
   patientId: string | null
   patientName: string | null
   patientPhone: string | null
-  doctor: any
+  doctorNombre: string
+  cedulaProf: string
+  cedulaEsp: string | null
+  emergencias: string | null
+  logoUrl: string | null
+  firmaUrl: string | null
 }
 
 function prevDay(d: string) {
@@ -44,7 +49,7 @@ function addHours(timeStr: string, hours: number): string {
   return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`
 }
 
-export default function ColonoscopyClient({ patientId, patientName, patientPhone, doctor }: Props) {
+export default function ColonoscopyClient({ patientId, patientName, patientPhone, doctorNombre, cedulaProf, cedulaEsp, emergencias, logoUrl, firmaUrl }: Props) {
   const [fecha,   setFecha]   = useState('')
   const [hora,    setHora]    = useState('09:00')
   const [ready,   setReady]   = useState(false)
@@ -80,7 +85,7 @@ AYUNO EL DÍA DE SU PROCEDIMIENTO.
 
 Acudir 20 minutos antes. Presentarse en área de endoscopía en compañía de un adulto mayor de edad.
 
-Dudas por WhatsApp: 477 523 2323`
+Dudas por WhatsApp: ${emergencias ?? ''}`
   )
 
   const waUrl = phone
@@ -174,8 +179,10 @@ Dudas por WhatsApp: 477 523 2323`
               <div style={{ fontSize: 13, color: '#1f2a37', marginTop: 2 }}>{displayName}</div>
               <div style={{ fontSize: 11, color: '#6b7280' }}>Procedimiento: {fmtFull(fecha)} · {hora}hrs</div>
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="" style={{ maxHeight: 80, maxWidth: 200, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+            {logoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logoUrl} alt="" style={{ maxHeight: 80, maxWidth: 200, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+            )}
           </div>
           <div style={{ height: 3, background: 'linear-gradient(90deg,#2e75b6,#16335c)' }} />
 
@@ -207,16 +214,18 @@ Dudas por WhatsApp: 477 523 2323`
               Presentarse en el <b>área de endoscopía</b> en compañía de un <b>adulto mayor de edad</b>.
             </Sec>
             <div style={{ background: '#dcfce7', border: '1px solid #86efac', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#166534', marginTop: 8 }}>
-              <b>Dudas por WhatsApp:</b> 477 523 2323
+              <b>Dudas por WhatsApp:</b> {emergencias}
             </div>
           </div>
 
           {/* Firma */}
           <div className="colon-firma" style={{ textAlign: 'center', padding: '0 1.5rem 1rem' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/firma.png" alt="" style={{ height: 90, objectFit: 'contain', mixBlendMode: 'multiply', display: 'block', margin: '0 auto' }} />
-            <p style={{ fontSize: 14, color: '#16335c', fontWeight: 600, marginTop: 4 }}>Fernando Quiroz Compeán</p>
-            <p style={{ fontSize: 11, color: '#6b7280' }}>Cédula Prof. {doctor.cedula_prof} · Esp. {doctor.cedula_esp}</p>
+            {firmaUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={firmaUrl} alt="" style={{ height: 90, objectFit: 'contain', mixBlendMode: 'multiply', display: 'block', margin: '0 auto' }} />
+            )}
+            <p style={{ fontSize: 14, color: '#16335c', fontWeight: 600, marginTop: 4 }}>{doctorNombre}</p>
+            <p style={{ fontSize: 11, color: '#6b7280' }}>Cédula Prof. {cedulaProf}{cedulaEsp ? ` · Esp. ${cedulaEsp}` : ''}</p>
           </div>
 
           <div style={{ background: '#16335c', height: 10 }} />

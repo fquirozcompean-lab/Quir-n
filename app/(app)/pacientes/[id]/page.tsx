@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { calcAge, initials, formatDate } from '@/lib/utils'
 import { SharePrescription } from './SharePrescription'
-import { DOCTOR } from '@/lib/doctor'
+import { getDoctorProfile } from '@/lib/doctor-profile'
 
 function Row({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null
@@ -41,10 +41,11 @@ export default async function PatientDetailPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: patient }, { data: attachments }, { data: consultations }] = await Promise.all([
+  const [{ data: patient }, { data: attachments }, { data: consultations }, profile] = await Promise.all([
     supabase.from('patients').select('*').eq('id', id).eq('user_id', user!.id).single(),
     supabase.from('attachments').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
     supabase.from('consultations').select('*').eq('patient_id', id).eq('user_id', user!.id).order('fecha', { ascending: false }),
+    getDoctorProfile(),
   ])
 
   if (!patient) notFound()
@@ -65,8 +66,9 @@ export default async function PatientDetailPage({
     if (digits.length >= 12 && digits.startsWith('52')) return digits
     return null
   })()
+  const reviewUrl = profile?.review_url
   const waMsg = encodeURIComponent(
-    `Estimado/a ${patient.nombre}, fue un placer atenderle en consulta. Si cuenta con un momento, le agradecería mucho compartir su experiencia con una reseña: ${DOCTOR.reviewUrl}`
+    `Estimado/a ${patient.nombre}, fue un placer atenderle en consulta. Si cuenta con un momento, le agradecería mucho compartir su experiencia con una reseña: ${reviewUrl}`
   )
   const waUrl = waPhone ? `https://wa.me/${waPhone}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`
 
@@ -104,23 +106,25 @@ export default async function PatientDetailPage({
           )}
         </div>
         <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
-          {DOCTOR.procedimiento.mostrar && (
+          {profile?.procedimiento?.mostrar && (
             <Link
-              href={`/pacientes/${id}${DOCTOR.procedimiento.href}`}
+              href={`/pacientes/${id}${profile.procedimiento.href}`}
               className="text-xs bg-teal text-white font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
             >
-              {DOCTOR.procedimiento.label}
+              {profile.procedimiento.label}
             </Link>
           )}
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-semibold text-white px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
-            style={{ background: '#25d366' }}
-          >
-            ★ Reseña
-          </a>
+          {reviewUrl && (
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-white px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
+              style={{ background: '#25d366' }}
+            >
+              ★ Reseña
+            </a>
+          )}
           <Link
             href={`/informes/${id}`}
             className="text-xs bg-accent text-white font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"

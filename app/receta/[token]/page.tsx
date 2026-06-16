@@ -1,8 +1,27 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { DOCTOR } from '@/lib/doctor'
 import type { Metadata } from 'next'
+import type { Consultorio } from '@/lib/types'
 import PrintButton from './PrintButton'
+
+interface PrescriptionView {
+  fecha: string
+  paciente_nombre: string
+  consultorio: string | null
+  dx: string[] | null
+  dx_texto: string | null
+  tx: string[] | null
+  tx_texto: string | null
+  estudios: string[] | null
+  doc_nombre: string
+  doc_cedula_prof: string
+  doc_cedula_esp: string | null
+  doc_emergencias: string | null
+  doc_email: string | null
+  doc_logo_url: string | null
+  doc_firma_url: string | null
+  doc_consultorios: Record<string, Consultorio> | null
+}
 
 export async function generateMetadata({
   params,
@@ -12,14 +31,12 @@ export async function generateMetadata({
   const { token } = await params
   const supabase = await createClient()
   const { data } = await supabase
-    .from('prescriptions')
-    .select('paciente_nombre')
-    .eq('token', token)
-    .gt('expires_at', new Date().toISOString())
-    .single()
+    .rpc('get_prescription_by_token', { p_token: token })
+    .maybeSingle()
+  const rx = data as PrescriptionView | null
   return {
-    title: data?.paciente_nombre
-      ? `Receta — ${data.paciente_nombre}`
+    title: rx?.paciente_nombre
+      ? `Receta — ${rx.paciente_nombre}`
       : 'Receta Digital',
   }
 }
@@ -39,23 +56,21 @@ export default async function RecetaPage({
   const { token } = await params
   const supabase = await createClient()
 
-  const { data: rx } = await supabase
-    .from('prescriptions')
-    .select('*')
-    .eq('token', token)
-    .gt('expires_at', new Date().toISOString())
-    .single()
+  const { data: rxRaw } = await supabase
+    .rpc('get_prescription_by_token', { p_token: token })
+    .maybeSingle()
 
+  const rx = rxRaw as PrescriptionView | null
   if (!rx) notFound()
 
-  const consultorioKey = rx.consultorio as 'Muguerza' | 'Angeles' | null
-  const consultorio = consultorioKey && DOCTOR.consultorios[consultorioKey]
-    ? DOCTOR.consultorios[consultorioKey]
+  const consultorios = (rx.doc_consultorios ?? {}) as Record<string, Consultorio>
+  const consultorio = rx.consultorio && consultorios[rx.consultorio]
+    ? consultorios[rx.consultorio]
     : null
 
-  const hasDx = (rx.dx?.length > 0) || rx.dx_texto
-  const hasTx = rx.tx_texto || (rx.tx?.length > 0)
-  const hasEstudios = rx.estudios?.length > 0
+  const hasDx = ((rx.dx?.length ?? 0) > 0) || !!rx.dx_texto
+  const hasTx = !!rx.tx_texto || ((rx.tx?.length ?? 0) > 0)
+  const hasEstudios = (rx.estudios?.length ?? 0) > 0
 
   return (
     <>
@@ -107,14 +122,16 @@ export default async function RecetaPage({
             </div>
 
             {/* Right: doctor logo */}
-            <div style={{ flexShrink: 0 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo.png"
-                alt="Dr. Fernando Quiroz Compeán"
-                style={{ maxWidth: 260, maxHeight: 130, objectFit: 'contain', mixBlendMode: 'multiply' }}
-              />
-            </div>
+            {rx.doc_logo_url && (
+              <div style={{ flexShrink: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={rx.doc_logo_url}
+                  alt={rx.doc_nombre}
+                  style={{ maxWidth: 260, maxHeight: 130, objectFit: 'contain', mixBlendMode: 'multiply' }}
+                />
+              </div>
+            )}
           </div>
 
           {/* ── Divider line ── */}
@@ -127,9 +144,9 @@ export default async function RecetaPage({
             {hasDx && (
               <div style={{ marginBottom: '1.5rem' }}>
                 <p style={{ margin: '0 0 0.4rem', fontSize: '0.7rem', color: '#6b7280', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'Inter, sans-serif' }}>Diagnóstico</p>
-                {rx.dx?.length > 0 && (
+                {(rx.dx?.length ?? 0) > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: rx.dx_texto ? '0.5rem' : 0 }}>
-                    {rx.dx.map((d: string) => (
+                    {rx.dx!.map((d: string) => (
                       <span key={d} style={{ fontSize: '0.8rem', background: '#eef4fb', color: '#16335c', fontWeight: 600, padding: '0.2rem 0.75rem', borderRadius: 999, border: '1px solid #b2d8d8', fontFamily: 'Inter, sans-serif' }}>{d}</span>
                     ))}
                   </div>
@@ -151,9 +168,9 @@ export default async function RecetaPage({
                       <p key={i} style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: '#1f2a37', lineHeight: 1.6 }}>{line}</p>
                     ))}
                   </div>
-                ) : rx.tx?.length > 0 ? (
+                ) : (rx.tx?.length ?? 0) > 0 ? (
                   <div style={{ paddingLeft: '0.5rem', borderLeft: '3px solid #2e75b6' }}>
-                    {rx.tx.map((t: string) => (
+                    {rx.tx!.map((t: string) => (
                       <p key={t} style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: '#1f2a37', fontWeight: 600 }}>{t}</p>
                     ))}
                   </div>
@@ -166,7 +183,7 @@ export default async function RecetaPage({
               <div style={{ marginBottom: '1rem' }}>
                 <p style={{ margin: '0 0 0.4rem', fontSize: '0.7rem', color: '#6b7280', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'Inter, sans-serif' }}>Estudios solicitados</p>
                 <ul style={{ margin: 0, paddingLeft: '1.2rem' }}>
-                  {rx.estudios.map((e: string) => (
+                  {rx.estudios!.map((e: string) => (
                     <li key={e} style={{ fontSize: '0.9rem', color: '#1f2a37', marginBottom: '0.25rem' }}>{e}</li>
                   ))}
                 </ul>
@@ -180,17 +197,19 @@ export default async function RecetaPage({
             {/* Signature area */}
             <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'flex-end' }}>
               <div style={{ textAlign: 'center', minWidth: 220 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/firma.png"
-                  alt="Firma"
-                  style={{ height: 90, objectFit: 'contain', mixBlendMode: 'multiply', display: 'block', margin: '0 auto' }}
-                />
+                {rx.doc_firma_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={rx.doc_firma_url}
+                    alt="Firma"
+                    style={{ height: 90, objectFit: 'contain', mixBlendMode: 'multiply', display: 'block', margin: '0 auto' }}
+                  />
+                )}
                 <div style={{ borderTop: '1.5px solid #374151', paddingTop: '0.4rem' }}>
-                  <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 700, color: '#16335c', fontFamily: 'Inter, sans-serif' }}>{DOCTOR.nombre}</p>
+                  <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 700, color: '#16335c', fontFamily: 'Inter, sans-serif' }}>{rx.doc_nombre}</p>
                   <p style={{ margin: 0, fontSize: '0.7rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                    Cédula Prof. {DOCTOR.cedula_prof}<br />
-                    Cédula Esp. {DOCTOR.cedula_esp}
+                    Cédula Prof. {rx.doc_cedula_prof}
+                    {rx.doc_cedula_esp && <><br />Cédula Esp. {rx.doc_cedula_esp}</>}
                   </p>
                 </div>
               </div>
@@ -199,33 +218,18 @@ export default async function RecetaPage({
 
           {/* ── Footer ── */}
           <div style={{ background: '#16335c', color: 'white', padding: '1rem 2rem' }}>
-            {consultorio ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              {consultorio && (
                 <div>
                   <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.7, fontFamily: 'Inter, sans-serif' }}>{consultorio.hospital}</p>
                   <p style={{ margin: '0.15rem 0 0', fontSize: '0.82rem', fontFamily: 'Inter, sans-serif' }}>{consultorio.consultorio} · {consultorio.telefono}</p>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ margin: 0, fontSize: '0.78rem', fontFamily: 'Inter, sans-serif', opacity: 0.9 }}>Emergencias: {DOCTOR.emergencias}</p>
-                  <p style={{ margin: '0.1rem 0 0', fontSize: '0.75rem', fontFamily: 'Inter, sans-serif', opacity: 0.7 }}>{DOCTOR.email}</p>
-                </div>
+              )}
+              <div style={{ textAlign: 'right' }}>
+                {rx.doc_emergencias && <p style={{ margin: 0, fontSize: '0.78rem', fontFamily: 'Inter, sans-serif', opacity: 0.9 }}>Emergencias: {rx.doc_emergencias}</p>}
+                {rx.doc_email && <p style={{ margin: '0.1rem 0 0', fontSize: '0.75rem', fontFamily: 'Inter, sans-serif', opacity: 0.7 }}>{rx.doc_email}</p>}
               </div>
-            ) : (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'space-between' }}>
-                <div>
-                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.7, fontFamily: 'Inter, sans-serif' }}>Christus Muguerza Altagracia</p>
-                  <p style={{ margin: '0.1rem 0 0', fontSize: '0.8rem', fontFamily: 'Inter, sans-serif' }}>Consultorio 312 · {DOCTOR.consultorios.Muguerza.telefono}</p>
-                </div>
-                <div>
-                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.7, fontFamily: 'Inter, sans-serif' }}>Hospital Ángeles León</p>
-                  <p style={{ margin: '0.1rem 0 0', fontSize: '0.8rem', fontFamily: 'Inter, sans-serif' }}>Torre II, Consultorio 615 · {DOCTOR.consultorios.Angeles.telefono}</p>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ margin: 0, fontSize: '0.78rem', fontFamily: 'Inter, sans-serif', opacity: 0.9 }}>Emergencias: {DOCTOR.emergencias}</p>
-                  <p style={{ margin: '0.1rem 0 0', fontSize: '0.75rem', fontFamily: 'Inter, sans-serif', opacity: 0.7 }}>{DOCTOR.email}</p>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
 

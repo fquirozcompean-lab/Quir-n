@@ -3,9 +3,8 @@
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
 import { ChipSelector } from './ChipSelector'
-import { CAT_DX, CAT_TX, CAT_EST, CAT_POSOLOGIA } from '@/lib/catalogs'
 import { calcAge } from '@/lib/utils'
-import type { Patient } from '@/lib/types'
+import type { Patient, Consultorio } from '@/lib/types'
 
 type ActionState = { error: string } | undefined
 type PatientAction = (prev: ActionState, formData: FormData) => Promise<ActionState>
@@ -14,6 +13,11 @@ interface PatientFormProps {
   initialData?: Patient
   action: PatientAction
   cancelHref?: string
+  catDx: string[]
+  catTx: string[]
+  catEst: string[]
+  catPosologia: Record<string, string>
+  consultorios: Record<string, Consultorio>
 }
 
 const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
@@ -45,7 +49,7 @@ function defaultExp(sexo: string) {
   return ''
 }
 
-export default function PatientForm({ initialData, action, cancelHref = '/pacientes' }: PatientFormProps) {
+export default function PatientForm({ initialData, action, cancelHref = '/pacientes', catDx, catTx, catEst, catPosologia, consultorios }: PatientFormProps) {
   const [state, formAction, pending] = useActionState(action, undefined)
   const [sexo, setSexo] = useState(initialData?.sexo ?? '')
   const [fnac, setFnac] = useState(initialData?.fecha_nacimiento ?? '')
@@ -70,7 +74,7 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
     setTx(newTx)
     if (txTextoManual) return
     const lines = newTx
-      .map(t => CAT_POSOLOGIA[t])
+      .map(t => catPosologia[t])
       .filter(Boolean)
       .join('\n')
     setTxTexto(lines)
@@ -95,8 +99,9 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
             <Field label="Consultorio">
               <select name="consultorio" className={cls} defaultValue={initialData?.consultorio ?? ''}>
                 <option value="">— Sin especificar —</option>
-                <option value="Angeles">Ángeles</option>
-                <option value="Muguerza">Muguerza</option>
+                {Object.keys(consultorios).map(key => (
+                  <option key={key} value={key}>{key}</option>
+                ))}
               </select>
             </Field>
           </div>
@@ -295,7 +300,7 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
 
       {/* ── Diagnóstico ── */}
       <SectionCard title="Diagnóstico">
-        <ChipSelector catalog={CAT_DX} selected={dx} onChange={setDx} />
+        <ChipSelector catalog={catDx} selected={dx} onChange={setDx} />
         <div className="mt-2">
           <Field label="Notas">
             <textarea name="dx_texto" className={cls} rows={2} defaultValue={initialData?.dx_texto ?? ''} />
@@ -305,7 +310,7 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
 
       {/* ── Tratamiento y solicitudes ── */}
       <SectionCard title="Tratamiento y solicitudes">
-        <ChipSelector catalog={CAT_TX} selected={tx} onChange={handleTxChange} />
+        <ChipSelector catalog={catTx} selected={tx} onChange={handleTxChange} />
         <div className="mt-2">
           <div className="flex items-center justify-between mb-1">
             <label className="text-xs text-muted">Indicaciones / Posología</label>
@@ -339,7 +344,7 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
           </Field>
         </div>
         <p className="text-xs text-muted font-semibold mt-4 mb-1">Estudios solicitados</p>
-        <ChipSelector catalog={CAT_EST} selected={estudios} onChange={setEstudios} />
+        <ChipSelector catalog={catEst} selected={estudios} onChange={setEstudios} />
       </SectionCard>
 
       {/* ── Acciones ── */}
