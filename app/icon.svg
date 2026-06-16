@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background rounded square, navy -->
+  <rect width="100" height="100" rx="20" fill="#16335c"/>
+  <!-- Q: white outer circle -->
+  <circle cx="47" cy="45" r="22" fill="none" stroke="white" stroke-width="8"/>
+  <!-- Q: diagonal tail -->
+  <line x1="61" y1="58" x2="76" y2="76" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <!-- Medical cross: teal, upper right -->
+  <rect x="72" y="10" width="4" height="14" rx="2" fill="#4dd9c0"/>
+  <rect x="66" y="15" width="16" height="4" rx="2" fill="#4dd9c0"/>
+</svg>

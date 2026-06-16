@@ -1,0 +1,176 @@
+Adriana Ramirez Silva .docx	Adriana Ramírez Silva	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Principio febrero\""}
+Aitana Valeria Monroy Hernandez.docx	Aitana Valeria Monroy Hernández	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"11 marzo\""}
+Alejandra Franco Gonzalez.docx	Alejandra Franco González	{"code":"22008","details":null,"hint":"Perhaps you need a different \"datestyle\" setting.","message":"date/time field value out of range: \"16 /10 /25\""}
+Alejandra Lozano Rosado.docx	Alejandra Lozano Rosado	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"20 de diciembre\""}
+Alicia Flores Vazquez.docx	Alicia Flores Vazquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Hace “2 semanas”\""}
+Alma Jessica Lopez Gonzalez.docx	Alma Jessica Lopez Gonzalez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Finales de mayo\""}
+Alondra Garcia Ramirez.docx	Alondra Garcia Ramirez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"29 noviembre 25\""}
+America Stephania Vega Lopez.docx	America Stephania Vega Lopez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"30 abril 26\""}
+Ana Gabriela Padilla Hernandez.docx	Ana Gabriela Padilla Hernandez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"13 mayo 26\""}
+Ana Laura Ochoa Herandez.docx	Ana Laura Ochoa Herandez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2 semanas\""}
+Ana Luz Ulloa Laguna.docx	Ana Luz Ulloa Laguna	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 de mayo\""}
+Ana Maria Rodriguez Gallegos.docx	Ana María Rodríguez Gallegos	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"3 meses\""}
+Ana Paola Robledo Andrade MIYAD.docx	Ana Paola Robledo Andrade MIYAD	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"25 de agosto 25\""}
+Ana laura Castillo Medina.docx	Ana Laura Castillo Medino	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"49 años\""}
+Anel Cordova Jurado.docx	Anel Córdova Jurado	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2021\""}
+Araceli del Rocio Gallardo Rocha.docx	Araceli del Rocio Gallardo Rocha	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"16 septiembre 25\""}
+Azucena Lira Ramirez.docx	Azucena Lira Ramirez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"30 marzo 26\""}
+Berenice Ramirez Ojeda.docx	Berenice Ramírez Ojeda	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"7 febrero 2026\""}
+Blanca Iris Rodriguez Gonzalez .docx	Blanca Iris Rodríguez González	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 mayo 26\""}
+Blanca Margarita Tapia Valdivia .docx	Blanca Margarita Tapia Valdivia	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Hace mas de un 1 año\""}
+Brenda Gabriela Martinez Rocio.docx	Brenda Gabriela Martinez Rocio	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"14 mayo\""}
+Brenda Graciela Trujillo Valle.docx	Brenda Graciela Trujillo Valle	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"1 mayo. Diu mirena\""}
+Brenda Padila Martinez.docx	Brenda Padila Martinez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"16 mayo 26\""}
+Carla Estrada Gonzalez.docx	Carla Estrada González	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 febrero 26\""}
+Carmen Flores Lopez.docx	Carmen Flores Lopez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"12 junio 2026\""}
+Cinthia Ivette Casas Ramirez.docx	Cinthia Ivette Casas Ramirez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 diciembre\""}
+Cinthia Noemi Najera Escobar.docx	Cinthia Noemi Najera Escobar	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"17 mayo 26\""}
+Cinthia Pamela Rivera Garcia.docx	Cinthia Pamela Rivera Garcia	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"4 marzo 26\""}
+Claudia Liliana Ruiz Marquez.docx	Claudia Liliana Ruiz Marquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2018\""}
+Claudia Patricia Vega Cuenca.docx	Claudia Patricia Vega Cuenca	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"A los 51 años\""}
+Claudia Quintana Garcia.docx	Claudia Quintana García	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"20 febrero\""}
+Claudia Rodriguez Rodriguez.docx	Claudia Rodríguez Rodríguez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Irregular\""}
+Dafne Youlyeng Corona Torres.docx	Dafne Youlyeng Corona Torres	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"8 – 10 de septiembre\""}
+Daniela Juarez Lazarin .docx	Daniela Juarez Lazarin	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2 febrero 26\""}
+Daniela Linneth Ornelas Gomar .docx	Daniela Linneth Ornelas Gomar	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"9 de octubre 2025\""}
+Danya Ciren Perez Espinoza.docx	Danya Ciren Pérez Espinoza	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"13 febrero 26\""}
+Diana Carolina Herrera Ascanio.docx	Diana Carolina Herrera Ascanio	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 enero 26\""}
+Diana Laura Abigail Robles Rivera.docx	Diana Laura Abigail Robles Rivera	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Lunes 16 de marzo\""}
+Diana Laura Esparza Garcia.docx	Diana Laura Esparza García	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 septiembre 2025\""}
+Dulce Maria Perez Suarez.docx	Dulce María Pérez Suarez	{"code":"22008","details":null,"hint":"Perhaps you need a different \"datestyle\" setting.","message":"date/time field value out of range: \"25/08/25\""}
+Elba Daniela Sanchez Padilla.docx	Elba Daniela Sanchez Padilla	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"19 enero\""}
+Elvia Andrea De Leon Gonzalez.docx	Elvia Andrea De León González	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Principios del mes pasado\""}
+Elvira Monserrat Muñoz Hernandez.docx	Elvira Monserrat Muñoz Hernandez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Desconoce (aproximadamente 3 semanas)\""}
+Erika Paola Sanchez Orozco.docx	Erika Paola Sánchez Orozco	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Noviembre 2025\""}
+Erika Torres Espinoza .docx	Erika Torres Espinoza	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"22 enero 26\""}
+Eva Maria Muñoz Gasca.docx	Eva Maria Muñoz Gasca	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"21 de abril\""}
+Gabriela Hernandez Gutierrez.docx	Gabriela Hernández Gutiérrez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"4 marzo 26\""}
+Guadalupe Karime Gabriela Mokarzel alba.docx	Guadalupe Karime Gabriela Mokarzel alba	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Miércoles 6 de mayo\""}
+HISTORIA CLINICA DEFINITIVA Alberta Sanchez Meza.docx	Alberta Sánchez Meza	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2014\""}
+HISTORIA CLINICA DEFINITIVA Ana Gabriela Ramirez Campos.docx	Ana Gabriela Ramírez Campos	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 junio 2025\""}
+HISTORIA CLINICA DEFINITIVA Ana Gabriela sandoval Valdez.docx	Ana Gabriela Sandoval Valdez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Actualmente reglando\""}
+HISTORIA CLINICA DEFINITIVA Ana Paola Castrejon Arredondo.docx	Ana Paola Castrejon Arredondo	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"06 de mayo\""}
+HISTORIA CLINICA DEFINITIVA Aurora Irazu Chavez Sanchez.docx	Aurora Irazú Chávez Sánchez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"24/julio/25\""}
+HISTORIA CLINICA DEFINITIVA Aurora Mendez Martinez .docx	Aurora Méndez Martínez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Febrero.\""}
+HISTORIA CLINICA DEFINITIVA Claudia Araceli Aguirre Lopez.docx	Claudia Araceli Aguirre López	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Portadora de diu mirena. 7 julio 2025\""}
+HISTORIA CLINICA DEFINITIVA Claudia Rosas Franco.docx	Claudia Rosas Franco	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Sabado 26 de julio 25\""}
+HISTORIA CLINICA DEFINITIVA Hernandez Ramos Asbeth Maribel.docx	Hernández Ramos Asbeth Maribel	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Portadora de Mirena\""}
+HISTORIA CLINICA DEFINITIVA Juana Monserrat Ibarra Venegas.docx	Juana Monserrat Ibarra Venegas	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"4 agosto 25\""}
+HISTORIA CLINICA DEFINITIVA Karen Ivette Martinez Zuñiga.docx	Karen Ivette Martínez Zúñiga	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 de Mayo\""}
+HISTORIA CLINICA DEFINITIVA Karla Lorena Cruz Salais.docx	Karla Lorena Cruz Salais	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 junio 25\""}
+HISTORIA CLINICA DEFINITIVA Karla Patricia Orozco Jimenez.docx	Karla Patricia Orozco Jimenez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"13 abril 25\""}
+HISTORIA CLINICA DEFINITIVA Karla ruth Serna Logan.docx	Karla Ruth Serna Logan	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"25 julio\""}
+HISTORIA CLINICA DEFINITIVA Laura Andrade Diaz.docx	Laura Andrade Diaz	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 de junio 25\""}
+HISTORIA CLINICA DEFINITIVA Laura Belen Cedillo Torres .docx	Laura Belen Cedillo Torres	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Mas de un mes sin reglar. 30 x 4 – 5\""}
+HISTORIA CLINICA DEFINITIVA Laura Eugenia De Jesus Rios Castro.docx	Laura Eugenia De Jesus Rios Castro	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2016\""}
+HISTORIA CLINICA DEFINITIVA Liliana de Leon Nieto.docx	Liliana de Leon Nieto	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"14, mayo\""}
+HISTORIA CLINICA DEFINITIVA Linda Lisbeth Pizarro Salcido.docx	Linda Lisbeth Pizarro Salcido	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"7 julio 2025\""}
+HISTORIA CLINICA DEFINITIVA Lorena Adriana Gomez Gonzalez.docx	Lorena Adriana Gómez ‘p’Gonzalez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"22 abril 2025\""}
+HISTORIA CLINICA DEFINITIVA Maria Fernanda tovar Mares .docx	Maria Fernanda tovar Mares	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"30 de junio 2025\""}
+HISTORIA CLINICA DEFINITIVA Maria del Rosario Trejo Rodriguez.docx	María del Rosario Trejo Rodríguez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Junio 2025. Actualmente dando pecho\""}
+HISTORIA CLINICA DEFINITIVA Marlene Galindo Alonso.docx	Marlene Galindo Alonso	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"24 Junio 2025\""}
+HISTORIA CLINICA DEFINITIVA Martha Itzel Flores Hernandez.docx	Martha Itzel Flores Hernandez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"17 de junio.\""}
+HISTORIA CLINICA DEFINITIVA Mayra Azucena Martinez Quiroz .docx	Mayra Azucena Martínez Quiroz	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"6 julio 25\""}
+HISTORIA CLINICA DEFINITIVA Michel Veronica Samaro Hernandez .docx	Michel Verónica Samaro Hernández	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"06 julio 25\""}
+HISTORIA CLINICA DEFINITIVA Monica Gabriela Urbina Ramirez .docx	Monica Gabriela Urbina Ramirez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Hace 8 meses\""}
+HISTORIA CLINICA DEFINITIVA Nancy Alejandra Diaz Padilla.docx	Nancy Alejandra Diaz Padilla	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 junio\""}
+HISTORIA CLINICA DEFINITIVA Noemi Lucero Embriz Lopez.docx	Noemi Lucero Embriz Lopez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 años. Menopausia prematura\""}
+HISTORIA CLINICA DEFINITIVA Paraiso Estrella Allison Gonzalez Araujo.docx	Paraíso Estrella Allison González Araujo	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Hace un mes (suspensión de\""}
+HISTORIA CLINICA DEFINITIVA Paulina Terrones Macias.docx	Paulina Terrones Macias	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"26 junio 25\""}
+HISTORIA CLINICA DEFINITIVA Susana Romero Andrade.docx	Susana Romero Andrade	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"8 julio 2025\""}
+HISTORIA CLINICA DEFINITIVA Victoria Aguilar Nanni.docx	Victoria Aguilar Nanni	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2015\""}
+HISTORIA CLINICA DEFINITIVA Yuko Yamamoto.docx	Yuko Yamamoto	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"30 mayo 2025\""}
+Hannia Eunise Dalai Moran Avila  .docx	Hannia Eunise Dalai Moran Avila	{"code":"22008","details":null,"hint":"Perhaps you need a different \"datestyle\" setting.","message":"date/time field value out of range: \"14/08/25\""}
+Imelda Montserrat Reyes Ramirez.docx	Imelda Montserrat Reyes Ramírez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 marzo\""}
+Irene Monjaraz Guzman.docx	Irene Monjaraz Guzman	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"19 diciembre 2009\""}
+Irma Armenta Lopez.docx	Irma Armenta López	{"code":"22008","details":null,"hint":"Perhaps you need a different \"datestyle\" setting.","message":"date/time field value out of range: \"50\""}
+Irma Itzel Fuentes Regalado.docx	Irma Itzel Fuentes Regalado	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"7 de 11 2025\""}
+Janeth Arenas Vazquez.docx	Janeth Arenas Vázquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"14 de diciembre 2025\""}
+Jannett Casas Ortiz.docx	Jannett Casas Ortiz	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Histerectomía por mioma\""}
+Jessica Berenice Garibay Serrano.docx	Jessica Berenice Garibay Serrano	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 marzo\""}
+Jessica Gonzalez Escoto.docx	Jessica González Escoto	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"28 abril 26\""}
+Joanna Jazin Garcia Belmudez.docx	Joanna Jazin García Belmudez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 de marzo\""}
+Jocelyne Alejandra Aranda Ortega.docx	Jocelyne Alejandra Aranda Ortega	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 marzo\""}
+Juana Denisse Calderon Jimenez .docx	Juana Denisse Calderón Jiménez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"20 agosto 2025\""}
+Juana Diana Balderas Rodriguez.docx	Juana Diana Balderas Rodríguez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 diciembre 2025\""}
+Juliana Feliciana Urbina Rojo.docx	Juliana Feliciana Urbina Rojo	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2021 ooforectomia\""}
+Julieta Ivete Torres Rangel.docx	Julieta Ivete Torres Rangel	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Marzo 2026\""}
+Julieta Marisol Nahiomi Del pozzo Vega.docx	Julieta Marisol Nahiomi Del pozzo Vega	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"6 enero 26\""}
+Karina Noemi Gonzalez Silva.docx	Karina Noemi Gonzalez Silva	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 de diciembre 25\""}
+Katia Joselyn Villa Rangel.docx	Katia Joselyn Villa Rangel	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"19 julio\""}
+Lariza Michelle Treviño Huerta.docx	Lariza Michelle Treviño Huerta	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"1 abril\""}
+Laura Quintero Jimenez.docx	Laura Quintero Jiménez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"A los 40 años\""}
+Lizeth Adriana Contreras Rodriguez.docx	Lizeth Adriana Contreras Rodriguez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Diciembre 14 del 2025\""}
+Lucia Genco Lizeaga.docx	Lucia Genco Lizeaga	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Finales de abril\""}
+Luz Alejandra Moreno Reynoso.docx	Luz Alejandra Moreno Reynoso	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 septiembre 2025\""}
+Luz Angelica Frias Aviña.docx	Luz Angelica Frias Aviña	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"51 años\""}
+Luz Eugenia Franco Canchola.docx	Luz Eugenia Franco Canchola	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2021\""}
+Luz Veronica Mares Donato.docx	Luz Verónica Mares Donato	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"4 octubre 2025\""}
+Ma Eugenia Jaramillo Valadez .docx	Ma Eugenia Jaramillo Valadez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"1019\""}
+Ma Guadalupe Perez Moreno.docx	Ma Guadalupe Pérez Moreno	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"9 marzo 26\""}
+Ma. Felix Irene Luna.docx	Ma. Feliz Irene Luna	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"48 años\""}
+Ma. Feliz Irene Luna.docx	Ma. Feliz Irene Luna	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"48 años\""}
+Marcela Guadalupe Diaz Alvarado.docx	Marcela Guadalupe Diaz Alvarado	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"26 – 30 de marzo\""}
+Maria Dolores Rodriguez Muñoz.docx	María Dolores Rodríguez Muñoz	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"13 marzo\""}
+Maria Fernanda Padilla Mata.docx	María Fernanda Padilla Mata	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 octubre 25\""}
+Maria Guadalupe Gutierrez romero.docx	María Guadalupe Gutiérrez romero	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"19 octubre 2025\""}
+Maria Guadalupe Ledezma Mosqueda.docx	María Guadalupe Ledezma Mosqueda	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Irregular\""}
+Maria Guadalupe Ramirez Cordova.docx	María Guadalupe Ramírez Córdova	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"17 marzo 2026\""}
+Maria Guadalupe Sanchez trujillo.docx	María Guadalupe Sánchez Trujillo	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Inicios de septiembre 2025\""}
+Maria Isabel Lozano Lozano.docx	María Isabel Lozano Lozano	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"40 años por histerectomía\""}
+Maria Lissett Aguilar Gutierrez.docx	María Lissett Aguilar Gutiérrez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10/agosto/25\""}
+Maria Lucia Jimenez Vazquez .docx	María Lucia Jiménez Vázquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"21 de septiembre 25\""}
+Maria de Jesus Garcia Chico.docx	María de Jesús García Chico	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Febrero 2024\""}
+Maria del Rocio Ramirez Muñoz .docx	María del Rocio Ramírez Muñoz	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"04 febrero 26\""}
+Maria del Socorro Vazquez Padilla.docx	María del Socorro Vázquez Padilla	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Histerectomía hace 10 años\""}
+Mariana Cantero Razo.docx	Mariana Cantero Razo	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"9 agosto 2025\""}
+Maripaz Garcia Miranda.docx	Maripaz García Miranda	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Actualmente reglando\""}
+Marisol Rodriguez Cortes.docx	Marisol Rodríguez Cortes	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"12 abril 2026\""}
+Marisol Romero Padilla.docx	Marisol Romero Padilla	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Agosto 2025\""}
+Marta America Botello Gomez.docx	Marta America Botello Gómez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Principios de febrero\""}
+Martha Guadalupe Mendieta Leal .docx	Martha Guadalupe Mendieta Leal	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Irregular. Pero Niega posibilidad de embarazo\""}
+Mayra Tovar Doniz.docx	Mayra Tovar Doniz	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"7 mayo\""}
+Milagros Brenda Ortiz Suarez.docx	Milagros Brenda Ortiz Suarez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Octubre 2025\""}
+Miranda Lizette Bravo Cierra.docx	Miranda Lizette Bravo Cierra	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"5 diciembre\""}
+Miriam Alvarez Lopez.docx	Miriam Álvarez López	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"42 años\""}
+Miriam Moreno Sanchez.docx	Miriam Moreno Sánchez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"22 diciembre 26\""}
+Monica Beatriz Sierra Jimenez.docx	Mónica Beatriz Sierra Jiménez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Septiembre 25\""}
+Natalia Isaura Mata Contreras.docx	Natalia Isaura Mata Contreras	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"28 enero 26\""}
+Natalia Velazquez Origel .docx	Natalia Velázquez Origel	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"31/julio/25\""}
+Noemi Marquez Pedraza.docx	Noemi Márquez Pedraza	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"26 octubre 2023\""}
+Nora Angelica Cerda Rodriguez.docx	Nora Angelica Cerda Rodríguez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"50 años\""}
+Norma Aguilera Villaseñor.docx	Norma Aguilera Villaseñor	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"23 enero\""}
+Norma Aileen Olmedo Guillen .docx	Norma Aileen Olmedo Guillen	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 enero\""}
+Norma Elizabeth Atilano Marquez.docx	Norma Elizabeth Atilano Marquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 mayo 26\""}
+Ofelia Arellano Hernandez.docx	Ofelia Arellano Hernández	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"2024\""}
+Olga Lidia Mosqueda Ramirez.docx	Olga Lidia Mosqueda Ramírez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"14 marzo 2026\""}
+Paloma Jose Vazquez .docx	Paloma José Vázquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"28 de enero\""}
+Paola Teresa Zavala Blancas.docx	Paola Teresa Zavala Blancas	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 marzo 2026\""}
+Patricia Barajas Aceves.docx	Patricia Barajas Aceves	{"code":"22008","details":null,"hint":"Perhaps you need a different \"datestyle\" setting.","message":"date/time field value out of range: \"49\""}
+Paula Fernanda Manrique Villanueva.docx	Paula Fernanda Manrique Villanueva	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"04 02 26ANTICONCEPTIVOS\""}
+Paulina Artega y Hernandez Magro.docx	Paulina Artega y Hernandez Magro	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"8 de mayo\""}
+Paulina Vega Vega .docx	Paulina Vega Vega	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"4 de noviembre 2025\""}
+Perla Nayely Espinoza Segura.docx	Perla Nayely Espinoza Segura	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Finales de diciembre\""}
+Regina Sarai Perez Zavala.docx	Regina Saraí Pérez Zavala	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 enero 26\""}
+Rocio Angelica Huerta Torres.docx	Rocio Angelica Huerta Torres	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"21 marzo 26\""}
+Rosa Estela Hernandez Jaime.docx	Rosa Estela Hernández Jaime	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"19 abril\""}
+Rosa Sanchez Moreno.docx	Rosa Sánchez Moreno	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"17 mayo 26\""}
+Roxana Isabel Fierro Blancarte.docx	Roxana Isabel Fierro Blancarte	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"17 de mayo\""}
+Samantha Barbara Salinas Alvarez .docx	Samantha Barbara Salinas Álvarez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"10 diciembre\""}
+Sandra Barron Serna.docx	Sandra Barron Serna	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Marzo 2026\""}
+Sasha Cloey Silva Lozano.docx	Sasha Cloey Silva Lozano	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"5 mayo 26\""}
+Sofia Alejandra Morales Ramirez.docx	Sofia Alejandra Morales Ramirez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"12 mayo 26\""}
+Sofia Isabel Silva Velazquez .docx	Sofia Isabel Silva Velazquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"27 agosto 25\""}
+Teresa Gabriela Andrade Cervantes.docx	Teresa Gabriela Andrade Cervantes	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Domingo reciente\""}
+Teresa de Jesus Suarez Velazquez.docx	Teresa de Jesus Suarez Velazquez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"Diciembre 2024\""}
+Valeria Hazel Ledesma Roman.docx	Valeria Hazel Ledesma Román	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"16 de octubre 2025\""}
+Valeria Nuñez Sandoval.docx	Valeria Núñez Sandoval	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 mayo 26\""}
+Vania Denisse Rios Rodriguez.docx	Vania Denisse Ríos Rodríguez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"20/septiembre/25\""}
+Vasti Liliana Sanchez Perez.docx	Vasti Liliana Sánchez Pérez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"6 febrero 26\""}
+Veronica Cobian Bernal.docx	Verónica Cobián Bernal	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"1 septiembre 2025\""}
+Vicenta Hernandez Landin.docx	Vicenta Hernández Landín	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"7 enero 2026\""}
+Viviana Peña Gomez.docx	Viviana Peña Gomez	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"19 abril 2026\""}
+Yareli Guadalupe Vazquez Rangel .docx	Yareli Guadalupe Vázquez Rangel	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"12 febrero 26\""}
+Yoana Gisela Mendoza Del Toro.docx	Yoana Gisela Mendoza Del Toro	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"15 febrero 26\""}
+Zaira Jaimes Chevaile.docx	Zaira Jaimes Chevaile	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"8 febrero 26ANTICONCEPTIVOS\""}
+Zelene Maricela Alba Romero .docx	Zelene Maricela Alba Romero	{"code":"22007","details":null,"hint":null,"message":"invalid input syntax for type date: \"18 de octubre 2025\""}
