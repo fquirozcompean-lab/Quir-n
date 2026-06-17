@@ -397,7 +397,7 @@ export default async function PatientDetailPage({
 
       {/* ── Zona de peligro ── */}
       <div className="border border-red-100 rounded-xl px-4 py-3 flex items-center justify-between">
-        <p className="text-xs text-muted">Eliminar este expediente y todos sus datos</p>
+        <p className="text-xs text-muted">Archivar este expediente (se conserva por NOM-004)</p>
         <DeletePatientButton patientId={id} email={user!.email!} />
       </div>
 

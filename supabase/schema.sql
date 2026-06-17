@@ -120,6 +120,7 @@ CREATE TABLE patients (
   estudios_solicitados text[] DEFAULT '{}',
   signos_vitales      jsonb,
   pronostico          text,
+  archived            boolean NOT NULL DEFAULT false,
   created_at          timestamptz DEFAULT now()
 );
 

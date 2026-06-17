@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { deletePatient } from './deleteActions'
+import { archivePatient } from './deleteActions'
 
 export default function DeletePatientButton({ patientId, email }: { patientId: string; email: string }) {
   const [open, setOpen] = useState(false)
@@ -34,7 +34,7 @@ export default function DeletePatientButton({ patientId, email }: { patientId: s
     }
 
     startTransition(async () => {
-      const result = await deletePatient(patientId)
+      const result = await archivePatient(patientId)
       if (result?.error) setError(result.error)
     })
   }
@@ -46,16 +46,16 @@ export default function DeletePatientButton({ patientId, email }: { patientId: s
         onClick={handleOpen}
         className="text-xs text-red-500 font-semibold hover:text-red-700 hover:underline"
       >
-        Eliminar expediente
+        Archivar expediente
       </button>
 
       {open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-            <h3 className="text-base font-extrabold text-red-600 mb-1">Eliminar expediente</h3>
+            <h3 className="text-base font-extrabold text-red-600 mb-1">Archivar expediente</h3>
             <p className="text-sm text-muted mb-4">
-              Se eliminarán el expediente, todas sus consultas y archivos adjuntos.
-              <strong className="text-navy"> Esta acción no se puede deshacer.</strong>
+              El expediente dejará de aparecer en la lista de pacientes activos.
+              Los datos se conservan en cumplimiento con la NOM-004-SSA3.
               <br /><br />
               Ingresa tu contraseña para confirmar.
             </p>
@@ -85,7 +85,7 @@ export default function DeletePatientButton({ patientId, email }: { patientId: s
                   disabled={pending}
                   className="flex-1 text-sm font-semibold py-2.5 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-60"
                 >
-                  {pending ? 'Eliminando…' : 'Sí, eliminar'}
+                  {pending ? 'Archivando…' : 'Sí, archivar'}
                 </button>
               </div>
             </form>

@@ -15,6 +15,7 @@ export default async function PacientesPage({
   let query = supabase
     .from('patients')
     .select('id, nombre, sexo, fecha_nacimiento, dx, ciudad')
+    .eq('archived', false)
 
   if (q?.trim()) {
     query = query.ilike('nombre', `%${q.trim()}%`).order('nombre', { ascending: true })
