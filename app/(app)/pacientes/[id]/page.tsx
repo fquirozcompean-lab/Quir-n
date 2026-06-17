@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { calcAge, initials, formatDate } from '@/lib/utils'
 import { SharePrescription } from './SharePrescription'
 import { getDoctorProfile } from '@/lib/doctor-profile'
+import DeletePatientButton from './DeletePatientButton'
 
 function Row({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null
@@ -392,6 +393,12 @@ export default async function PatientDetailPage({
             ))}
           </div>
         )}
+      </div>
+
+      {/* ── Zona de peligro ── */}
+      <div className="border border-red-100 rounded-xl px-4 py-3 flex items-center justify-between">
+        <p className="text-xs text-muted">Eliminar este expediente y todos sus datos</p>
+        <DeletePatientButton patientId={id} email={user!.email!} />
       </div>
 
     </div>
