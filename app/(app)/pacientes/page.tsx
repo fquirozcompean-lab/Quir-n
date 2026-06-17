@@ -38,12 +38,20 @@ export default async function PacientesPage({
         <h2 className="text-lg font-extrabold text-navy">
           Pacientes{patients ? ` (${patients.length})` : ''}
         </h2>
-        <Link
-          href="/pacientes/nuevo"
-          className="bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-teal transition-colors"
-        >
-          + Nuevo
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/importar"
+            className="bg-teal-light text-navy text-sm font-semibold px-3 py-2 rounded-lg hover:bg-border transition-colors"
+          >
+            ↑ Importar
+          </Link>
+          <Link
+            href="/pacientes/nuevo"
+            className="bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-teal transition-colors"
+          >
+            + Nuevo
+          </Link>
+        </div>
       </div>
 
       <SearchBar defaultValue={q ?? ''} />
