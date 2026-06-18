@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: 'Expediente médico electrónico',
     url: 'https://quironmd.com',
     siteName: 'Quirón',
-    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Quirón' }],
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'Quirón' }],
     type: 'website',
   },
 }
