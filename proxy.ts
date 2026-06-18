@@ -35,6 +35,9 @@ export async function proxy(request: NextRequest) {
     pathname === '/login' ||
     pathname === '/signup' ||
     pathname === '/suscripcion' ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
+    pathname.startsWith('/auth/') ||
     pathname.startsWith('/receta/')
 
   if (!user && !isPublicPath) {

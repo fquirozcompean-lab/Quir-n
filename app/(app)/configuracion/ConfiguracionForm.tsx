@@ -100,8 +100,8 @@ export default function ConfiguracionForm({ profile, showOnboarding }: { profile
           <Field label="Ciudad">
             <input name="ciudad" className={cls} defaultValue={profile.ciudad ?? ''} />
           </Field>
-          <Field label="Link de reseña de Google (botón WhatsApp)">
-            <input name="review_url" className={cls} defaultValue={profile.review_url ?? ''} placeholder="https://g.page/r/..." />
+          <Field label="Link para reseñas en Google Business">
+            <input name="review_url" className={cls} defaultValue={profile.review_url ?? ''} placeholder="Link para reseñas en Google Business" />
           </Field>
         </div>
       </SectionCard>
