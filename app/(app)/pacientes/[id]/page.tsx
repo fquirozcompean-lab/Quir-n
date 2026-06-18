@@ -115,6 +115,22 @@ export default async function PatientDetailPage({
               {profile.procedimiento.label}
             </Link>
           )}
+          {profile?.procedimiento?.postquirurgico_mostrar && (
+            <Link
+              href={`/pacientes/${id}/postoperatorio`}
+              className="text-xs bg-teal text-white font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              {profile.procedimiento.postquirurgico_label ?? 'Postquirúrgico'}
+            </Link>
+          )}
+          {profile?.procedimiento?.postcuidados_mostrar && (
+            <Link
+              href={`/pacientes/${id}/postcuidados`}
+              className="text-xs bg-teal text-white font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              {profile.procedimiento.postcuidados_label ?? 'Cuidados post'}
+            </Link>
+          )}
           {reviewUrl && (
             <a
               href={waUrl}

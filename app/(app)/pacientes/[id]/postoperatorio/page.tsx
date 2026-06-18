@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { getDoctorProfile } from '@/lib/doctor-profile'
 import ProcedimientoClient from '@/components/ProcedimientoClient'
 
-export default async function ColonoscopyPage({
+export default async function PostoperatorioPage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -17,16 +17,14 @@ export default async function ColonoscopyPage({
     getDoctorProfile(),
   ])
 
-  if (!patient || !profile?.procedimiento?.mostrar) notFound()
+  if (!patient || !profile?.procedimiento?.postquirurgico_mostrar) notFound()
 
   return (
     <ProcedimientoClient
-      tipo="pre"
+      tipo="post"
       procedimientoLabel={profile.procedimiento.label}
-      tituloHoja={`Preparación — ${profile.procedimiento.label}`}
-      secciones={profile.procedimiento.pre_secciones ?? []}
-      prepInicioOffset={profile.procedimiento.pre_prep_inicio ?? -6}
-      prepFinOffset={profile.procedimiento.pre_prep_fin ?? -4}
+      tituloHoja={profile.procedimiento.postquirurgico_label ?? 'Instrucciones postquirúrgicas'}
+      secciones={profile.procedimiento.postquirurgico_secciones ?? []}
       patientId={id}
       patientName={patient.nombre}
       patientPhone={patient.telefono}

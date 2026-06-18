@@ -12,7 +12,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   await ensureDoctorProfile(user.id)
   const profile = await getDoctorProfile()
 
-  if (profile && !['trialing', 'active'].includes(profile.subscription_status)) {
+  const trialExpired = profile?.subscription_status === 'trialing' &&
+    profile?.trial_ends_at != null &&
+    new Date(profile.trial_ends_at) < new Date()
+
+  if (!profile || !['trialing', 'active'].includes(profile.subscription_status) || trialExpired) {
     redirect('/suscripcion')
   }
 

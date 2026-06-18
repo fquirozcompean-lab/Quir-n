@@ -86,10 +86,27 @@ export interface Consultorio {
   estado: string
 }
 
+export interface ProcedimientoSeccion {
+  titulo: string
+  contenido: string
+}
+
 export interface Procedimiento {
   label: string
   href: string
   mostrar: boolean
+  // Pre-procedure configurable sections
+  pre_secciones?: ProcedimientoSeccion[]
+  pre_prep_inicio?: number   // hours offset for {hora_prep_inicio} (default -6)
+  pre_prep_fin?: number      // hours offset for {hora_prep_fin} (default -4)
+  // Post-surgical
+  postquirurgico_mostrar?: boolean
+  postquirurgico_label?: string
+  postquirurgico_secciones?: ProcedimientoSeccion[]
+  // Post-care
+  postcuidados_mostrar?: boolean
+  postcuidados_label?: string
+  postcuidados_secciones?: ProcedimientoSeccion[]
 }
 
 export interface DoctorProfile {

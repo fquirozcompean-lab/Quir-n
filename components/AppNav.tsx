@@ -32,6 +32,12 @@ export default function AppNav({
     ...(procedimiento?.mostrar
       ? [{ href: procedimiento.href, label: procedimiento.label }]
       : []),
+    ...(procedimiento?.postquirurgico_mostrar
+      ? [{ href: '/postoperatorio', label: procedimiento.postquirurgico_label ?? 'Postquirúrgico' }]
+      : []),
+    ...(procedimiento?.postcuidados_mostrar
+      ? [{ href: '/postcuidados', label: procedimiento.postcuidados_label ?? 'Cuidados post' }]
+      : []),
     ...EXTRA_NAV,
   ]
 

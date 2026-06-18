@@ -5,6 +5,7 @@ import { updateDoctorProfileAction } from './actions'
 import { CatalogEditor } from '@/components/CatalogEditor'
 import { PosologiaEditor } from '@/components/PosologiaEditor'
 import { ConsultoriosEditor } from '@/components/ConsultoriosEditor'
+import { SeccionesEditor } from '@/components/SeccionesEditor'
 import type { DoctorProfile } from '@/lib/types'
 
 const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
@@ -128,22 +129,61 @@ export default function ConfiguracionForm({ profile, showOnboarding }: { profile
         <ConsultoriosEditor name="consultorios" initial={profile.consultorios} />
       </SectionCard>
 
-      <SectionCard title="Procedimiento especial (opcional)">
-        <p className="text-xs text-muted mb-2">
-          Activa esto solo si quieres un botón de preparación para un procedimiento específico en el expediente del paciente.
+      <SectionCard title="Preparación pre-procedimiento (opcional)">
+        <p className="text-xs text-muted mb-3">
+          Instrucciones que se entregan antes de un procedimiento (ej. colonoscopía, cistoscopía). Cada sección genera una tarjeta en el PDF y el mensaje de WhatsApp.
         </p>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-3">
           <input type="checkbox" id="procedimiento_mostrar" name="procedimiento_mostrar" defaultChecked={profile.procedimiento.mostrar} />
-          <label htmlFor="procedimiento_mostrar" className="text-sm text-navy">Mostrar botón de procedimiento</label>
+          <label htmlFor="procedimiento_mostrar" className="text-sm text-navy font-semibold">Activar preparación pre-procedimiento</label>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           <Field label="Nombre del procedimiento">
-            <input name="procedimiento_label" className={cls} defaultValue={profile.procedimiento.label} placeholder="Cistoscopía" />
+            <input name="procedimiento_label" className={cls} defaultValue={profile.procedimiento.label} placeholder="Colonoscopía" />
           </Field>
-          <Field label="Ruta (avanzado, no cambiar si no sabes)">
+          <Field label="Ruta (no cambiar)">
             <input name="procedimiento_href" className={cls} defaultValue={profile.procedimiento.href} />
           </Field>
+          <Field label="Horas inicio preparación (ej. -6)">
+            <input name="pre_prep_inicio" type="number" className={cls} defaultValue={profile.procedimiento.pre_prep_inicio ?? -6} />
+          </Field>
+          <Field label="Horas fin preparación (ej. -4)">
+            <input name="pre_prep_fin" type="number" className={cls} defaultValue={profile.procedimiento.pre_prep_fin ?? -4} />
+          </Field>
         </div>
+        <SeccionesEditor name="pre_secciones" initial={profile.procedimiento.pre_secciones ?? []} />
+      </SectionCard>
+
+      <SectionCard title="Instrucciones postquirúrgicas (opcional)">
+        <p className="text-xs text-muted mb-3">
+          Instrucciones para entregar al paciente después de una cirugía o procedimiento.
+        </p>
+        <div className="flex items-center gap-2 mb-3">
+          <input type="checkbox" id="postquirurgico_mostrar" name="postquirurgico_mostrar" defaultChecked={profile.procedimiento.postquirurgico_mostrar ?? false} />
+          <label htmlFor="postquirurgico_mostrar" className="text-sm text-navy font-semibold">Activar instrucciones postquirúrgicas</label>
+        </div>
+        <div className="mb-3">
+          <Field label="Nombre del botón">
+            <input name="postquirurgico_label" className={cls} defaultValue={profile.procedimiento.postquirurgico_label ?? 'Instrucciones postquirúrgicas'} />
+          </Field>
+        </div>
+        <SeccionesEditor name="postquirurgico_secciones" initial={profile.procedimiento.postquirurgico_secciones ?? []} />
+      </SectionCard>
+
+      <SectionCard title="Cuidados post (opcional)">
+        <p className="text-xs text-muted mb-3">
+          Instrucciones de cuidados y seguimiento tras un procedimiento o consulta.
+        </p>
+        <div className="flex items-center gap-2 mb-3">
+          <input type="checkbox" id="postcuidados_mostrar" name="postcuidados_mostrar" defaultChecked={profile.procedimiento.postcuidados_mostrar ?? false} />
+          <label htmlFor="postcuidados_mostrar" className="text-sm text-navy font-semibold">Activar cuidados post</label>
+        </div>
+        <div className="mb-3">
+          <Field label="Nombre del botón">
+            <input name="postcuidados_label" className={cls} defaultValue={profile.procedimiento.postcuidados_label ?? 'Cuidados post'} />
+          </Field>
+        </div>
+        <SeccionesEditor name="postcuidados_secciones" initial={profile.procedimiento.postcuidados_secciones ?? []} />
       </SectionCard>
 
       <SectionCard title="Diagnósticos frecuentes">
