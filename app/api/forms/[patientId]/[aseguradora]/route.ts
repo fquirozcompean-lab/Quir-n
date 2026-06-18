@@ -8,8 +8,12 @@ import { calcAge } from '@/lib/utils'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
-function set(form: PDFForm, name: string, value: string | null | undefined) {
-  try { form.getTextField(name).setText(value || '') } catch {}
+function set(form: PDFForm, name: string, value: string | null | undefined, fontSize = 9) {
+  try {
+    const f = form.getTextField(name)
+    f.setFontSize(fontSize)
+    f.setText(value || '')
+  } catch {}
 }
 function check(form: PDFForm, name: string, yes: boolean) {
   try { yes ? form.getCheckBox(name).check() : form.getCheckBox(name).uncheck() } catch {}
@@ -129,11 +133,14 @@ export async function GET(
 
   const form = doc.getForm()
 
-  // Clear all fields
+  // Clear all fields and fix font size
   for (const f of form.getFields()) {
     try {
-      if (f.constructor.name === 'PDFTextField')  (f as any).setText('')
-      if (f.constructor.name === 'PDFCheckBox')   (f as any).uncheck()
+      if (f.constructor.name === 'PDFTextField') {
+        ;(f as any).setFontSize(9)
+        ;(f as any).setText('')
+      }
+      if (f.constructor.name === 'PDFCheckBox') (f as any).uncheck()
     } catch {}
   }
 
