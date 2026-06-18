@@ -13,9 +13,10 @@ const BASE_NAV = [
 ]
 
 const EXTRA_NAV = [
-  { href: '/cierre',       label: 'Cierre del día' },
-  { href: '/exportar',     label: 'Exportar'       },
-  { href: '/configuracion', label: 'Configuración' },
+  { href: '/cierre',        label: 'Cierre del día'  },
+  { href: '/exportar',      label: 'Exportar'        },
+  { href: '/importar',      label: 'Importar'        },
+  { href: '/configuracion', label: 'Configuración'   },
 ]
 
 export default function AppNav({

@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
+import Link from 'next/link'
 import { updateDoctorProfileAction } from './actions'
 import { CatalogEditor } from '@/components/CatalogEditor'
 import { PosologiaEditor } from '@/components/PosologiaEditor'
@@ -208,8 +209,30 @@ export default function ConfiguracionForm({ profile, showOnboarding }: { profile
       {state?.error && (
         <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{state.error}</p>
       )}
-      {state?.success && (
+      {state?.success && !showOnboarding && (
         <p className="text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2">Configuración guardada.</p>
+      )}
+      {state?.success && showOnboarding && (
+        <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-4 space-y-2">
+          <p className="text-sm font-semibold text-green-800">¡Perfil guardado!</p>
+          <p className="text-sm text-green-700">
+            ¿Ya tienes pacientes en un archivo Word o PDF? Puedes importarlos automáticamente con IA.
+          </p>
+          <div className="flex gap-3 pt-1">
+            <Link
+              href="/importar"
+              className="bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-teal transition-colors"
+            >
+              Importar pacientes
+            </Link>
+            <Link
+              href="/pacientes"
+              className="text-sm text-muted hover:text-navy px-4 py-2 rounded-lg border border-border hover:border-navy transition-colors"
+            >
+              Empezar sin importar
+            </Link>
+          </div>
+        </div>
       )}
 
       <button
