@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { saveWizardProfile, saveWizardConsultorio, completeOnboarding } from './actions'
 import type { DoctorProfile } from '@/lib/types'
 
-const STEPS = ['Bienvenida', 'Tu perfil', 'Consultorio', 'Todo listo']
+const STEPS = ['Bienvenida', 'Tu perfil', 'Consultorio', 'Herramientas', 'Todo listo']
 
 function ProgressBar({ current }: { current: number }) {
   return (
@@ -36,9 +36,21 @@ function ProgressBar({ current }: { current: number }) {
   )
 }
 
-export default function OnboardingWizard({ profile }: { profile: DoctorProfile }) {
+function InfoCard({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex gap-3 p-3 bg-white border border-border rounded-xl">
+      <span className="text-xl mt-0.5 flex-shrink-0">{icon}</span>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-navy mb-1">{title}</p>
+        <div className="text-xs text-muted leading-relaxed space-y-1">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+export default function OnboardingWizard({ profile, isTutorial = false }: { profile: DoctorProfile; isTutorial?: boolean }) {
   const router = useRouter()
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(isTutorial ? 3 : 0)
   const [saving, startSave] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
@@ -285,15 +297,70 @@ export default function OnboardingWizard({ profile }: { profile: DoctorProfile }
         </div>
       )}
 
-      {/* Step 3: Listo */}
+      {/* Step 3: Herramientas */}
       {step === 3 && (
+        <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
+          <div>
+            <h2 className="text-lg font-bold text-navy">Personaliza tu flujo de trabajo</h2>
+            <p className="text-xs text-muted mt-1">
+              Estas herramientas se configuran una sola vez en{' '}
+              <span className="font-semibold text-navy">Configuración</span> y te ahorran tiempo en cada consulta.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <InfoCard icon="🏷️" title="Diagnósticos frecuentes">
+              <p>
+                Agrega los diagnósticos que usas más en tu práctica (ej. "ERGE", "Colitis", "Gastritis crónica").
+              </p>
+              <p>
+                Al crear una consulta aparecen como chips seleccionables — un clic y queda registrado, sin escribir.
+              </p>
+            </InfoCard>
+
+            <InfoCard icon="💊" title="Tratamientos y posología">
+              <p>
+                Define tus medicamentos con su dosis habitual (ej. "Omeprazol → 20 mg cada 24 h por 30 días").
+              </p>
+              <p>
+                Cuando seleccionas un tratamiento en la consulta, la posología se auto-completa con lo que configuraste.
+                Puedes editarla por paciente si necesitas ajustar la dosis.
+              </p>
+            </InfoCard>
+
+            <InfoCard icon="📋" title="Documentos editables">
+              <p>
+                Si realizas procedimientos (colonoscopia, cirugías, etc.), puedes crear hojas de instrucciones
+                personalizadas: preparación previa, cuidados post-quirúrgicos, recuperación.
+              </p>
+              <p>
+                Cada hoja se genera con el nombre del paciente y las fechas correctas, lista para imprimir o
+                enviar por WhatsApp directamente desde el expediente.
+              </p>
+              <p className="font-medium text-navy">
+                Actívalas en Configuración → sección "Procedimiento especial".
+              </p>
+            </InfoCard>
+          </div>
+
+          <button
+            onClick={() => setStep(4)}
+            className="w-full bg-navy text-white font-semibold py-3 rounded-xl hover:bg-teal transition-colors"
+          >
+            Entendido →
+          </button>
+        </div>
+      )}
+
+      {/* Step 4: Listo */}
+      {step === 4 && !isTutorial && (
         <div className="bg-card border border-border rounded-2xl p-6 space-y-5 text-center">
           <div className="text-5xl">🎉</div>
           <div>
             <h2 className="text-lg font-bold text-navy">¡Todo listo!</h2>
             <p className="text-sm text-muted mt-1">
-              Tu perfil está configurado. Puedes completar tu logo, firma y catálogos desde{' '}
-              <span className="font-medium text-navy">Configuración</span> cuando quieras.
+              Tu perfil está configurado. Completa tu logo, firma, catálogos y documentos cuando quieras desde{' '}
+              <span className="font-medium text-navy">Configuración</span>.
             </p>
           </div>
 
@@ -325,9 +392,26 @@ export default function OnboardingWizard({ profile }: { profile: DoctorProfile }
             </button>
           </div>
 
-          {saving && (
-            <p className="text-xs text-muted">Preparando tu cuenta…</p>
-          )}
+          {saving && <p className="text-xs text-muted">Preparando tu cuenta…</p>}
+        </div>
+      )}
+
+      {step === 4 && isTutorial && (
+        <div className="bg-card border border-border rounded-2xl p-6 space-y-4 text-center">
+          <div className="text-4xl">👍</div>
+          <div>
+            <h2 className="text-lg font-bold text-navy">¡Listo!</h2>
+            <p className="text-sm text-muted mt-1">
+              Recuerda que puedes configurar catálogos y documentos desde{' '}
+              <span className="font-medium text-navy">Configuración</span> en el menú.
+            </p>
+          </div>
+          <button
+            onClick={() => router.push('/pacientes')}
+            className="w-full bg-navy text-white font-semibold py-3 rounded-xl hover:bg-teal transition-colors"
+          >
+            Volver a mis pacientes
+          </button>
         </div>
       )}
     </div>
