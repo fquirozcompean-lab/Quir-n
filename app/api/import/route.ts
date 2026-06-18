@@ -35,8 +35,20 @@ export async function POST(request: NextRequest) {
       const mammoth = await import('mammoth')
       const result = await mammoth.extractRawText({ buffer })
       text = result.value
+    } else if (name.endsWith('.doc')) {
+      // Intenta mammoth primero (Google Docs a veces exporta .doc como OOXML)
+      try {
+        const mammoth = await import('mammoth')
+        const result = await mammoth.extractRawText({ buffer })
+        text = result.value
+      } catch {
+        // Fallback: extraer cadenas legibles del binario .doc
+        const raw = buffer.toString('latin1')
+        const chunks = raw.match(/[\x20-\x7E\xC0-\xFF\n\r\t]{5,}/g) ?? []
+        text = chunks.join('\n')
+      }
     } else {
-      return NextResponse.json({ error: 'Formato no soportado. Use PDF o Word (.docx)' }, { status: 400 })
+      return NextResponse.json({ error: 'Formato no soportado. Use PDF, Word (.docx) o Word antiguo (.doc)' }, { status: 400 })
     }
   } catch (e) {
     return NextResponse.json({ error: `Error al leer el archivo: ${String(e)}` }, { status: 500 })

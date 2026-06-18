@@ -122,7 +122,7 @@ export default function ImportClient() {
         <input
           ref={fileRef}
           type="file"
-          accept=".pdf,.docx"
+          accept=".pdf,.docx,.doc"
           className="hidden"
           onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
         />
@@ -130,7 +130,7 @@ export default function ImportClient() {
         <p className="font-semibold text-navy text-sm">
           {processing ? 'Procesando…' : 'Arrastra un archivo o haz clic para seleccionar'}
         </p>
-        <p className="text-xs text-muted mt-1">Soporta PDF y Word (.docx)</p>
+        <p className="text-xs text-muted mt-1">Soporta PDF, Word (.docx) y Google Docs (.doc)</p>
         {fileName && !processing && (
           <p className="text-xs text-teal mt-2 font-medium">{fileName}</p>
         )}
