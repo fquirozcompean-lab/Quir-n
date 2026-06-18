@@ -11,7 +11,7 @@ import { calcAge } from '@/lib/utils'
 function set(form: PDFForm, name: string, value: string | null | undefined, fontSize = 9) {
   try {
     const f = form.getTextField(name)
-    f.setFontSize(fontSize)
+    try { f.setFontSize(fontSize) } catch {}
     f.setText(value || '')
   } catch {}
 }
@@ -137,7 +137,7 @@ export async function GET(
   for (const f of form.getFields()) {
     try {
       if (f.constructor.name === 'PDFTextField') {
-        ;(f as any).setFontSize(9)
+        try { ;(f as any).setFontSize(9) } catch {}
         ;(f as any).setText('')
       }
       if (f.constructor.name === 'PDFCheckBox') (f as any).uncheck()
