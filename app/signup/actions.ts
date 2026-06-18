@@ -39,5 +39,5 @@ export async function signupAction(
   }
 
   await ensureDoctorProfile(data.user.id)
-  redirect('/configuracion?onboarding=1')
+  redirect('/onboarding')
 }

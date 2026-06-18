@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import AppNav from '@/components/AppNav'
 import { ensureDoctorProfile, getDoctorProfile } from '@/lib/doctor-profile'
 
@@ -21,6 +22,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   if (!isDev && (!profile || !['trialing', 'active'].includes(profile.subscription_status) || trialExpired)) {
     redirect('/suscripcion')
+  }
+
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') ?? ''
+  if (!profile?.onboarding_done && !pathname.startsWith('/onboarding')) {
+    redirect('/onboarding')
   }
 
   return (
