@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 function statusFromStripe(status: Stripe.Subscription.Status): string {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
+    event = getStripe().webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch {
     return new NextResponse('Invalid signature', { status: 400 })
   }
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   const supabase = createAdminClient()
 
   async function syncSubscription(subscriptionId: string, customerId: string) {
-    const sub = await stripe.subscriptions.retrieve(subscriptionId)
+    const sub = await getStripe().subscriptions.retrieve(subscriptionId)
     await supabase
       .from('doctor_profiles')
       .update({
