@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
 
 export async function saveWizardProfile(data: {
   nombre: string
@@ -21,6 +22,7 @@ export async function saveWizardProfile(data: {
     .eq('user_id', user.id)
 
   if (error) return { error: 'No se pudo guardar. Intenta de nuevo.' }
+  revalidatePath('/', 'layout')
   return { ok: true }
 }
 
@@ -54,6 +56,7 @@ export async function saveWizardConsultorio(data: {
     .eq('user_id', user.id)
 
   if (error) return { error: 'No se pudo guardar. Intenta de nuevo.' }
+  revalidatePath('/', 'layout')
   return { ok: true }
 }
 
@@ -66,4 +69,6 @@ export async function completeOnboarding() {
     .from('doctor_profiles')
     .update({ onboarding_done: true })
     .eq('user_id', user.id)
+
+  revalidatePath('/', 'layout')
 }
