@@ -3,8 +3,9 @@ import './globals.css'
 import RegisterSW from '@/components/RegisterSW'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://quironmd.com'),
   title: 'Quirón',
-  description: 'Expedientes clínicos para consultorios médicos',
+  description: 'Expediente médico electrónico',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -14,6 +15,14 @@ export const metadata: Metadata = {
   icons: {
     apple: '/apple-touch-icon.png',
     icon: '/icon-192.png',
+  },
+  openGraph: {
+    title: 'Quirón',
+    description: 'Expediente médico electrónico',
+    url: 'https://quironmd.com',
+    siteName: 'Quirón',
+    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Quirón' }],
+    type: 'website',
   },
 }
 
