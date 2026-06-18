@@ -48,6 +48,18 @@ function InfoCard({ icon, title, children }: { icon: string; title: string; chil
   )
 }
 
+const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
+
+function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-muted mb-1">{label}</label>
+      {children}
+      {hint && <p className="text-xs text-muted mt-1">{hint}</p>}
+    </div>
+  )
+}
+
 export default function OnboardingWizard({ profile, isTutorial = false }: { profile: DoctorProfile; isTutorial?: boolean }) {
   const router = useRouter()
   const [step, setStep] = useState(isTutorial ? 3 : 0)
@@ -67,18 +79,6 @@ export default function OnboardingWizard({ profile, isTutorial = false }: { prof
   const [hospital, setHospital] = useState('')
   const [ciudad, setCiudad] = useState(profile.ciudad || '')
   const [telefono, setTelefono] = useState('')
-
-  const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
-
-  function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
-    return (
-      <div>
-        <label className="block text-xs font-medium text-muted mb-1">{label}</label>
-        {children}
-        {hint && <p className="text-xs text-muted mt-1">{hint}</p>}
-      </div>
-    )
-  }
 
   function handleSaveProfile() {
     if (!nombre.trim()) { setError('El nombre completo es requerido.'); return }
