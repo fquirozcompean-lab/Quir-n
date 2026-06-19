@@ -9,8 +9,8 @@ type ActionState = { error: string } | undefined
 type ConsultAction = (prev: ActionState, formData: FormData) => Promise<ActionState>
 
 interface InitialData {
-  fecha?: string; consultorio?: string; motivo?: string
-  padecimiento?: string; exploracion?: string
+  fecha?: string; hora?: string; consultorio?: string; motivo?: string
+  padecimiento?: string; exploracion?: string; analisis?: string
   dx?: string[]; dx_texto?: string
   tx?: string[]; tx_texto?: string
   estudios_solicitados?: string[]; pronostico?: string
@@ -76,6 +76,8 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
   const [customDx, setCustomDx] = useState('')
 
   const today = new Date().toISOString().slice(0, 10)
+  const now = new Date()
+  const nowHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 
   const catalogDx = dx.filter(d => catDx.includes(d))
   const extraDx   = dx.filter(d => !catDx.includes(d))
@@ -98,6 +100,9 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Fecha *">
             <input name="fecha" type="date" className={cls} defaultValue={initialData?.fecha ?? today} required />
+          </Field>
+          <Field label="Hora de inicio">
+            <input name="hora" type="time" className={cls} defaultValue={initialData?.hora ?? nowHM} />
           </Field>
           <Field label="Consultorio">
             <select name="consultorio" className={cls} defaultValue={initialData?.consultorio ?? defaultConsultorio ?? ''}>
@@ -140,6 +145,12 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
             />
           </Field>
         </div>
+      </SectionCard>
+
+      <SectionCard title="Análisis">
+        <Field label="">
+          <textarea name="analisis" className={cls} rows={3} defaultValue={initialData?.analisis ?? ''} placeholder="Integración diagnóstica, razonamiento clínico…" />
+        </Field>
       </SectionCard>
 
       <SectionCard title="Diagnóstico">

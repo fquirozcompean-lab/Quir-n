@@ -33,7 +33,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex flex-col min-h-screen">
       <AppNav nombreCorto={profile?.nombre_corto || ''} procedimiento={profile?.procedimiento ?? null} />
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-4">
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-4 print:max-w-full print:p-0">
         {children}
       </main>
     </div>

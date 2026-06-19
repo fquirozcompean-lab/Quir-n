@@ -20,6 +20,7 @@ function buildPatientData(formData: FormData) {
     hemotipo: (formData.get('hemotipo') as string) || null,
     telefono: (formData.get('telefono') as string) || null,
     fecha_consulta: (formData.get('fecha_consulta') as string) || null,
+    hora_consulta: (formData.get('hora_consulta') as string) || null,
     consultorio: (formData.get('consultorio') as string) || null,
     fuente: (formData.get('fuente') as string) || null,
     refiere: (formData.get('refiere') as string) || null,
@@ -48,6 +49,7 @@ function buildPatientData(formData: FormData) {
     anticonceptivos: sexo === 'F' ? ((formData.get('anticonceptivos') as string) || null) : null,
     padecimiento: (formData.get('padecimiento') as string) || null,
     exploracion: (formData.get('exploracion') as string) || null,
+    analisis: (formData.get('analisis') as string) || null,
     dx: JSON.parse((formData.get('dx') as string) || '[]') as string[],
     dx_texto: (formData.get('dx_texto') as string) || null,
     tx: JSON.parse((formData.get('tx') as string) || '[]') as string[],
@@ -79,7 +81,7 @@ export async function createPatient(_prev: ActionState, formData: FormData): Pro
     .single()
 
   if (error || !data) return { error: 'Error al guardar el expediente. Intenta de nuevo.' }
-  redirect(`/pacientes/${data.id}`)
+  redirect(`/pacientes/${data.id}/imprimir?nuevo=1`)
 }
 
 export async function updatePatient(_prev: ActionState, formData: FormData): Promise<ActionState> {

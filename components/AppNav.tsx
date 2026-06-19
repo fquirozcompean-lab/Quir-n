@@ -45,7 +45,7 @@ export default function AppNav({
 
   return (
     <>
-      <header className="bg-navy text-white px-4 py-3 flex items-center gap-2 sticky top-0 z-10">
+      <header className="bg-navy text-white px-4 py-3 flex items-center gap-2 sticky top-0 z-10 print:hidden">
         <span className="font-extrabold text-lg tracking-tight">Quirón</span>
         <span className="ml-auto text-xs opacity-80">{nombreCorto}</span>
         <InstallButton />
@@ -59,7 +59,7 @@ export default function AppNav({
         </form>
       </header>
 
-      <nav className="bg-card border-b border-border px-2 py-1.5 flex gap-1 sticky top-[52px] z-10 overflow-x-auto">
+      <nav className="bg-card border-b border-border px-2 py-1.5 flex gap-1 sticky top-[52px] z-10 overflow-x-auto print:hidden">
         {NAV_ITEMS.map(({ href, label }) => {
           const active = pathname === href || (href !== '/' && pathname.startsWith(href))
           return (

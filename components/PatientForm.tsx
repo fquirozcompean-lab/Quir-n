@@ -62,6 +62,8 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
 
   const isEdit = !!initialData
   const today = new Date().toISOString().slice(0, 10)
+  const now = new Date()
+  const nowHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 
   function handleSexoChange(val: string) {
     setSexo(val)
@@ -144,6 +146,9 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
           </Field>
           <Field label="Fecha de consulta">
             <input name="fecha_consulta" type="date" className={cls} defaultValue={initialData?.fecha_consulta ?? today} />
+          </Field>
+          <Field label="Hora de inicio">
+            <input name="hora_consulta" type="time" className={cls} defaultValue={initialData?.hora_consulta ?? nowHM} />
           </Field>
           <Field label="Quién refiere">
             <input name="refiere" className={cls} defaultValue={initialData?.refiere ?? ''} />
@@ -296,6 +301,13 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
             </div>
           ))}
         </div>
+      </SectionCard>
+
+      {/* ── Análisis ── */}
+      <SectionCard title="Análisis">
+        <Field label="">
+          <textarea name="analisis" className={cls} rows={3} defaultValue={initialData?.analisis ?? ''} placeholder="Integración diagnóstica, razonamiento clínico…" />
+        </Field>
       </SectionCard>
 
       {/* ── Diagnóstico ── */}

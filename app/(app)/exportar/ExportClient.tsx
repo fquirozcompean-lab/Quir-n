@@ -21,16 +21,23 @@ export default function ExportClient({ patients }: { patients: Patient[] }) {
     setSelected(s)
   }
 
-  async function download(format: 'json' | 'csv') {
-    setDownloading(format)
-    const ids = selected.size === 0 || selected.size === patients.length
+  function currentIds() {
+    return selected.size === 0 || selected.size === patients.length
       ? 'all'
       : [...selected].join(',')
-    const url = `/api/export?format=${format}&ids=${ids}`
+  }
+
+  async function download(format: 'json' | 'csv') {
+    setDownloading(format)
+    const url = `/api/export?format=${format}&ids=${currentIds()}`
     const a = document.createElement('a')
     a.href = url
     a.click()
     setTimeout(() => setDownloading(null), 1500)
+  }
+
+  function openPdf() {
+    window.open(`/exportar/imprimir?ids=${currentIds()}`, '_blank')
   }
 
   const count = selected.size === 0 ? patients.length : selected.size
@@ -60,8 +67,17 @@ export default function ExportClient({ patients }: { patients: Patient[] }) {
           >
             {downloading === 'csv' ? 'Descargando…' : '⬇ CSV (Excel)'}
           </button>
+          <button
+            onClick={openPdf}
+            className="bg-accent text-white text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition-colors"
+          >
+            📄 PDF (imprimible)
+          </button>
         </div>
-        <p className="text-xs text-muted">El JSON incluye consultas de seguimiento. El CSV incluye los datos principales del expediente.</p>
+        <p className="text-xs text-muted">
+          El JSON incluye consultas de seguimiento. El CSV incluye los datos principales del expediente.
+          El PDF abre una vista imprimible del expediente completo (historia, consultas y recetas) — usa "Imprimir / Guardar PDF" en la pestaña nueva.
+        </p>
       </div>
 
       {/* Lista de pacientes */}

@@ -13,6 +13,7 @@ export interface Patient {
   hemotipo: string | null
   telefono: string | null
   fecha_consulta: string | null
+  hora_consulta: string | null
   consultorio: string | null
   fuente: string | null
   refiere: string | null
@@ -41,6 +42,7 @@ export interface Patient {
   anticonceptivos: string | null
   padecimiento: string | null
   exploracion: string | null
+  analisis: string | null
   dx: string[]
   dx_texto: string | null
   tx: string[]

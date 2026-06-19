@@ -202,6 +202,7 @@ export default function ConfiguracionForm({ profile, showOnboarding }: { profile
       <SectionCard title="Posología predeterminada">
         <p className="text-xs text-muted mb-2">
           Cuando selecciones uno de estos medicamentos en una consulta, se autocompletará esta indicación.
+          Al guardar, cada medicamento se agrega automáticamente a "Tratamientos frecuentes" — no es necesario duplicarlo a mano.
         </p>
         <PosologiaEditor name="cat_posologia" initial={profile.cat_posologia} />
       </SectionCard>

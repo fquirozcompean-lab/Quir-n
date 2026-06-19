@@ -143,6 +143,12 @@ export default async function PatientDetailPage({
             </a>
           )}
           <Link
+            href={`/pacientes/${id}/imprimir`}
+            className="text-xs bg-navy text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-teal transition-colors"
+          >
+            🖨 Imprimir expediente
+          </Link>
+          <Link
             href={`/informes/${id}`}
             className="text-xs bg-accent text-white font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
           >
@@ -318,8 +324,9 @@ export default async function PatientDetailPage({
               <div key={c.id} className="border border-border rounded-lg p-3">
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-navy">{formatDate(c.fecha)}</span>
+                    <span className="text-xs font-bold text-navy">{formatDate(c.fecha)}{c.hora ? ` · ${c.hora}` : ''}</span>
                     <Link href={`/pacientes/${id}/consulta/${c.id}/editar`} className="text-xs text-muted hover:text-teal hover:underline">Editar</Link>
+                    <Link href={`/pacientes/${id}/consulta/${c.id}/imprimir`} className="text-xs text-muted hover:text-teal hover:underline">Imprimir</Link>
                   </div>
                   <div className="flex items-center gap-1.5">
                     {c.pronostico && (

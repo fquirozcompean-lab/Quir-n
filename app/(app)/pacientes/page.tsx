@@ -41,6 +41,12 @@ export default async function PacientesPage({
         </h2>
         <div className="flex gap-2">
           <Link
+            href="/pacientes/archivados"
+            className="bg-teal-light text-navy text-sm font-semibold px-3 py-2 rounded-lg hover:bg-border transition-colors"
+          >
+            🗄 Archivados
+          </Link>
+          <Link
             href="/importar"
             className="bg-teal-light text-navy text-sm font-semibold px-3 py-2 rounded-lg hover:bg-border transition-colors"
           >

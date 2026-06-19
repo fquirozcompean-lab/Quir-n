@@ -43,10 +43,12 @@ export default async function EditConsultaPage({
         consultorios={profile?.consultorios ?? {}}
         initialData={{
           fecha:              consulta.fecha,
+          hora:               consulta.hora,
           consultorio:        consulta.consultorio,
           motivo:             consulta.motivo,
           padecimiento:       consulta.padecimiento,
           exploracion:        consulta.exploracion,
+          analisis:           consulta.analisis,
           dx:                 consulta.dx ?? [],
           dx_texto:           consulta.dx_texto,
           tx:                 consulta.tx ?? [],

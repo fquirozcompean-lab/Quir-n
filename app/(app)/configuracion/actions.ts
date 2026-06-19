@@ -62,11 +62,16 @@ export async function updateDoctorProfileAction(_prev: ActionState, formData: Fo
     },
     consultorios: JSON.parse((formData.get('consultorios') as string) || '{}'),
     cat_dx: JSON.parse((formData.get('cat_dx') as string) || '[]'),
-    cat_tx: JSON.parse((formData.get('cat_tx') as string) || '[]'),
     cat_est: JSON.parse((formData.get('cat_est') as string) || '[]'),
     cat_posologia: JSON.parse((formData.get('cat_posologia') as string) || '{}'),
     onboarding_done: true,
   }
+
+  // Cualquier medicamento con posología configurada se agrega automáticamente
+  // al catálogo de tratamientos frecuentes — sin necesidad de duplicarlo a mano.
+  const cat_tx = JSON.parse((formData.get('cat_tx') as string) || '[]') as string[]
+  const cat_posologia = update.cat_posologia as Record<string, string>
+  update.cat_tx = Array.from(new Set([...cat_tx, ...Object.keys(cat_posologia)]))
 
   const logoFile = formData.get('logo') as File | null
   if (logoFile && logoFile.size > 0) {

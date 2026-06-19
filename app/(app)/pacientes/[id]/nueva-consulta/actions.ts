@@ -13,14 +13,16 @@ export async function saveConsultationAction(
 
   const patientId = formData.get('patient_id') as string
 
-  const { error } = await supabase.from('consultations').insert({
+  const { data, error } = await supabase.from('consultations').insert({
     patient_id:           patientId,
     user_id:              user.id,
     fecha:                formData.get('fecha') as string,
+    hora:                 formData.get('hora') as string || null,
     consultorio:          formData.get('consultorio') as string || null,
     motivo:               formData.get('motivo') as string || null,
     padecimiento:         formData.get('padecimiento') as string || null,
     exploracion:          formData.get('exploracion') as string || null,
+    analisis:             formData.get('analisis') as string || null,
     dx:                   JSON.parse((formData.get('dx') as string) || '[]'),
     dx_texto:             formData.get('dx_texto') as string || null,
     tx:                   JSON.parse((formData.get('tx') as string) || '[]'),
@@ -34,10 +36,10 @@ export async function saveConsultationAction(
       temp: (formData.get('sv_temp') as string) || '36.5',
       spo2: (formData.get('sv_spo2') as string) || '98',
     },
-  })
+  }).select('id').single()
 
-  if (error) return { error: error.message }
-  redirect(`/pacientes/${patientId}`)
+  if (error || !data) return { error: error?.message ?? 'No se pudo guardar la consulta.' }
+  redirect(`/pacientes/${patientId}/consulta/${data.id}/imprimir?nuevo=1`)
 }
 
 export async function updateConsultationAction(
@@ -53,10 +55,12 @@ export async function updateConsultationAction(
 
   const { error } = await supabase.from('consultations').update({
     fecha:                formData.get('fecha') as string,
+    hora:                 formData.get('hora') as string || null,
     consultorio:          formData.get('consultorio') as string || null,
     motivo:               formData.get('motivo') as string || null,
     padecimiento:         formData.get('padecimiento') as string || null,
     exploracion:          formData.get('exploracion') as string || null,
+    analisis:             formData.get('analisis') as string || null,
     dx:                   JSON.parse((formData.get('dx') as string) || '[]'),
     dx_texto:             formData.get('dx_texto') as string || null,
     tx:                   JSON.parse((formData.get('tx') as string) || '[]'),
@@ -73,5 +77,5 @@ export async function updateConsultationAction(
   }).eq('id', consultationId).eq('user_id', user.id)
 
   if (error) return { error: error.message }
-  redirect(`/pacientes/${patientId}`)
+  redirect(`/pacientes/${patientId}/consulta/${consultationId}/imprimir`)
 }

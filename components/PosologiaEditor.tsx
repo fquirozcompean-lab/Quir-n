@@ -36,7 +36,7 @@ export function PosologiaEditor({ name, initial }: { name: string; initial: Reco
         <input
           value={medicamento}
           onChange={e => setMedicamento(e.target.value)}
-          placeholder="Medicamento (igual al de Tratamiento)"
+          placeholder="Medicamento"
           className="text-sm px-3 py-2 border border-border rounded-lg bg-white"
         />
         <div className="flex gap-2">
