@@ -1,27 +1,36 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { calcAge, initials } from '@/lib/utils'
+import { calcAge, initials, formatDate } from '@/lib/utils'
 import { SearchBar } from './SearchBar'
+import { SortSelect } from './SortSelect'
 import QuickUploadFab from './QuickUploadFab'
+
+const SORTS = {
+  nombre_asc:  { column: 'nombre',         ascending: true  },
+  nombre_desc: { column: 'nombre',         ascending: false },
+  fecha_desc:  { column: 'fecha_consulta', ascending: false },
+  fecha_asc:   { column: 'fecha_consulta', ascending: true  },
+} as const
 
 export default async function PacientesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string; sort?: string }>
 }) {
-  const { q } = await searchParams
+  const { q, sort } = await searchParams
+  const sortKey = (sort && sort in SORTS ? sort : 'nombre_asc') as keyof typeof SORTS
+  const { column, ascending } = SORTS[sortKey]
   const supabase = await createClient()
 
   let query = supabase
     .from('patients')
-    .select('id, nombre, sexo, fecha_nacimiento, dx, ciudad')
+    .select('id, nombre, sexo, fecha_nacimiento, fecha_consulta, dx, ciudad')
     .eq('archived', false)
 
   if (q?.trim()) {
-    query = query.ilike('nombre', `%${q.trim()}%`).order('nombre', { ascending: true })
-  } else {
-    query = query.order('nombre', { ascending: true })
+    query = query.ilike('nombre', `%${q.trim()}%`)
   }
+  query = query.order(column, { ascending, nullsFirst: false })
 
   const [{ data: patients }, { data: attachRows }] = await Promise.all([
     query,
@@ -32,6 +41,8 @@ export default async function PacientesPage({
     acc[patient_id] = (acc[patient_id] ?? 0) + 1
     return acc
   }, {})
+
+  const showFecha = sortKey === 'fecha_desc' || sortKey === 'fecha_asc'
 
   return (
     <>
@@ -61,7 +72,12 @@ export default async function PacientesPage({
         </div>
       </div>
 
-      <SearchBar defaultValue={q ?? ''} />
+      <div className="flex gap-2 mb-4">
+        <div className="flex-1">
+          <SearchBar defaultValue={q ?? ''} />
+        </div>
+        <SortSelect defaultValue={sortKey} />
+      </div>
       <QuickUploadFab />
 
       {!patients || patients.length === 0 ? (
@@ -89,6 +105,7 @@ export default async function PacientesPage({
                     {isFemale ? 'F' : p.sexo === 'M' ? 'M' : '—'} · {calcAge(p.fecha_nacimiento)}
                     {p.ciudad ? ` · ${p.ciudad}` : ''}
                     {p.dx?.[0] ? ` · ${p.dx[0]}` : ''}
+                    {showFecha && p.fecha_consulta ? ` · ${formatDate(p.fecha_consulta)}` : ''}
                   </div>
                 </div>
                 <span className="text-xs bg-teal-light text-navy px-2.5 py-1 rounded-full flex-shrink-0">
