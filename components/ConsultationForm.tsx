@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
 import { ChipSelector } from './ChipSelector'
+import HistoriaClinicaPanel, { type HistoriaClinicaData } from './HistoriaClinicaPanel'
 import type { Consultorio } from '@/lib/types'
 
 type ActionState = { error: string } | undefined
@@ -28,6 +29,7 @@ interface Props {
   catTx: string[]
   catEst: string[]
   consultorios: Record<string, Consultorio>
+  historiaClinica?: HistoriaClinicaData
 }
 
 const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
@@ -67,7 +69,7 @@ function VitalField({ name, label, defaultValue: dv, unit }: { name: string; lab
 const EXP_F = 'A la exploración física se encuentra paciente alerta, orientada, cooperadora, adecuado estado de hidratación y coloración de tegumentos, cardiopulmonar sin alteraciones, abdomen globoso a expensas de panículo adiposo, blando, depresible, no doloroso a la palpación, sin datos de irritación peritoneal, extremidades integras sin alteraciones.'
 const EXP_M = 'A la exploración física se encuentra paciente alerta, orientado, cooperador, adecuado estado de hidratación y coloración de tegumentos, cardiopulmonar sin alteraciones, abdomen globoso a expensas de panículo adiposo, blando, depresible, no doloroso a la palpación, sin datos de irritación peritoneal, extremidades integras sin alteraciones.'
 
-export default function ConsultationForm({ patientId, patientName, defaultConsultorio, action, initialData, isEdit, catDx, catTx, catEst, consultorios }: Props) {
+export default function ConsultationForm({ patientId, patientName, defaultConsultorio, action, initialData, isEdit, catDx, catTx, catEst, consultorios, historiaClinica }: Props) {
   const [state, formAction, pending] = useActionState(action, undefined)
   const [dx, setDx]             = useState<string[]>(initialData?.dx ?? [])
   const [tx, setTx]             = useState<string[]>(initialData?.tx ?? [])
@@ -95,6 +97,8 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
       <input type="hidden" name="dx" value={JSON.stringify(dx)} />
       <input type="hidden" name="tx" value={JSON.stringify(tx)} />
       <input type="hidden" name="estudios_solicitados" value={JSON.stringify(estudios)} />
+
+      {historiaClinica && <HistoriaClinicaPanel patientId={patientId} data={historiaClinica} />}
 
       <SectionCard title="Datos de la consulta">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

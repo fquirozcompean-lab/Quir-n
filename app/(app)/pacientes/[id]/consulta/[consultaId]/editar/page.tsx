@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import ConsultationForm from '@/components/ConsultationForm'
 import { updateConsultationAction } from '@/app/(app)/pacientes/[id]/nueva-consulta/actions'
 import { getDoctorProfile } from '@/lib/doctor-profile'
+import { calcAge } from '@/lib/utils'
 
 export default async function EditConsultaPage({
   params,
@@ -14,7 +15,10 @@ export default async function EditConsultaPage({
   const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: patient }, { data: consulta }, profile] = await Promise.all([
-    supabase.from('patients').select('nombre, consultorio').eq('id', id).eq('user_id', user!.id).single(),
+    supabase
+      .from('patients')
+      .select('nombre, consultorio, fecha_nacimiento, sexo, ciudad, cronicos, quirurgicos, alergicos, medicamentos, padecimiento, exploracion, analisis, dx, dx_texto, tx, tx_texto')
+      .eq('id', id).eq('user_id', user!.id).single(),
     supabase.from('consultations').select('*').eq('id', consultaId).eq('user_id', user!.id).single(),
     getDoctorProfile(),
   ])
@@ -41,6 +45,22 @@ export default async function EditConsultaPage({
         catTx={profile?.cat_tx ?? []}
         catEst={profile?.cat_est ?? []}
         consultorios={profile?.consultorios ?? {}}
+        historiaClinica={{
+          edad: calcAge(patient.fecha_nacimiento),
+          sexo: patient.sexo,
+          ciudad: patient.ciudad,
+          cronicos: patient.cronicos,
+          quirurgicos: patient.quirurgicos,
+          alergicos: patient.alergicos,
+          medicamentos: patient.medicamentos,
+          padecimiento: patient.padecimiento,
+          exploracion: patient.exploracion,
+          analisis: patient.analisis,
+          dx: patient.dx,
+          dx_texto: patient.dx_texto,
+          tx: patient.tx,
+          tx_texto: patient.tx_texto,
+        }}
         initialData={{
           fecha:              consulta.fecha,
           hora:               consulta.hora,
