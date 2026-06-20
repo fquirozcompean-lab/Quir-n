@@ -1,9 +1,10 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ChipSelector } from './ChipSelector'
 import { calcAge } from '@/lib/utils'
+import { findSimilarPatients } from '@/app/(app)/pacientes/actions'
 import type { Patient, Consultorio } from '@/lib/types'
 
 type ActionState = { error: string } | undefined
@@ -65,6 +66,18 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
   const now = new Date()
   const nowHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 
+  const [nombre, setNombre] = useState(initialData?.nombre ?? '')
+  const [duplicates, setDuplicates] = useState<{ id: string; nombre: string; archived: boolean }[]>([])
+
+  useEffect(() => {
+    if (isEdit) return
+    const t = setTimeout(async () => {
+      const matches = await findSimilarPatients(nombre)
+      setDuplicates(matches)
+    }, 400)
+    return () => clearTimeout(t)
+  }, [nombre, isEdit])
+
   function handleSexoChange(val: string) {
     setSexo(val)
     if (!exploracion || exploracion === EXP_F || exploracion === EXP_M) {
@@ -94,8 +107,33 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="sm:col-span-2">
             <Field label="Nombre *">
-              <input name="nombre" className={cls} defaultValue={initialData?.nombre} placeholder="Apellido Apellido Nombre" required />
+              <input
+                name="nombre"
+                className={cls}
+                value={nombre}
+                onChange={e => setNombre(e.target.value)}
+                placeholder="Apellido Apellido Nombre"
+                required
+              />
             </Field>
+            {!isEdit && duplicates.length > 0 && (
+              <div className="mt-2 bg-yellow-50 border border-yellow-300 rounded-lg px-3 py-2 space-y-1.5">
+                <p className="text-xs font-semibold text-yellow-800">
+                  ⚠ Ya existe{duplicates.length > 1 ? 'n' : ''} {duplicates.length > 1 ? 'pacientes con nombres' : 'un paciente con nombre'} similar — revisa si no es el mismo:
+                </p>
+                {duplicates.map(d => (
+                  <Link
+                    key={d.id}
+                    href={`/pacientes/${d.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-xs text-teal font-semibold hover:underline"
+                  >
+                    {d.nombre}{d.archived ? ' (archivado)' : ''} →
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
           <div className="sm:col-span-2">
             <Field label="Consultorio">

@@ -42,10 +42,11 @@ export default async function PatientDetailPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: patient }, { data: attachments }, { data: consultations }, profile] = await Promise.all([
+  const [{ data: patient }, { data: attachments }, { data: consultations }, { data: prescriptions }, profile] = await Promise.all([
     supabase.from('patients').select('*').eq('id', id).eq('user_id', user!.id).single(),
     supabase.from('attachments').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
     supabase.from('consultations').select('*').eq('patient_id', id).eq('user_id', user!.id).order('fecha', { ascending: false }),
+    supabase.from('prescriptions').select('token, fecha, created_at').eq('patient_id', id).eq('user_id', user!.id).order('created_at', { ascending: false }),
     getDoctorProfile(),
   ])
 
@@ -304,6 +305,27 @@ export default async function PatientDetailPage({
         )}
         <SharePrescription patientId={id} />
       </div>
+
+      {/* ── Historial de recetas ── */}
+      {prescriptions && prescriptions.length > 0 && (
+        <div className="bg-card rounded-xl border border-border px-4 py-4">
+          <h3 className="text-teal text-sm font-semibold uppercase tracking-wide mb-3">
+            Historial de recetas ({prescriptions.length})
+          </h3>
+          <div className="space-y-1.5">
+            {prescriptions.map(rx => (
+              <div key={rx.token} className="flex items-center justify-between gap-2 text-sm border border-border rounded-lg px-3 py-2">
+                <span className="text-navy font-medium">{formatDate(rx.fecha)}</span>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <a href={`/receta/${rx.token}`} target="_blank" rel="noopener noreferrer" className="text-xs text-teal font-semibold hover:underline">
+                    Ver →
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Consultas de seguimiento ── */}
       <div className="bg-card rounded-xl border border-border px-4 py-4">

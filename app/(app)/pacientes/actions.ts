@@ -5,6 +5,31 @@ import { redirect } from 'next/navigation'
 
 type ActionState = { error: string } | undefined
 
+export async function findSimilarPatients(nombre: string): Promise<{ id: string; nombre: string; archived: boolean }[]> {
+  const trimmed = nombre.trim()
+  if (trimmed.length < 3) return []
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+
+  const palabras = trimmed.split(/\s+/).filter(w => w.length >= 3)
+  if (palabras.length === 0) return []
+
+  let query = supabase
+    .from('patients')
+    .select('id, nombre, archived')
+    .eq('user_id', user.id)
+    .limit(5)
+
+  for (const palabra of palabras) {
+    query = query.ilike('nombre', `%${palabra}%`)
+  }
+
+  const { data } = await query
+  return data ?? []
+}
+
 function buildPatientData(formData: FormData) {
   const sexo = (formData.get('sexo') as string) || null
   return {
