@@ -59,7 +59,6 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
   const [estudios, setEstudios] = useState<string[]>(initialData?.estudios_solicitados ?? [])
   const [exploracion, setExploracion] = useState(initialData?.exploracion ?? '')
   const [txTexto, setTxTexto] = useState(initialData?.tx_texto ?? '')
-  const [txTextoManual, setTxTextoManual] = useState(!!initialData?.tx_texto)
 
   const isEdit = !!initialData
   const today = new Date().toISOString().slice(0, 10)
@@ -86,13 +85,13 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
   }
 
   function handleTxChange(newTx: string[]) {
+    const added = newTx.filter(t => !tx.includes(t))
     setTx(newTx)
-    if (txTextoManual) return
-    const lines = newTx
-      .map(t => catPosologia[t])
-      .filter(Boolean)
-      .join('\n')
-    setTxTexto(lines)
+    if (added.length === 0) return
+    const lines = added.map(t => catPosologia[t]).filter(Boolean)
+    if (lines.length > 0) {
+      setTxTexto(prev => (prev.trim() ? `${prev.trim()}\n${lines.join('\n')}` : lines.join('\n')))
+    }
   }
 
   return (
@@ -362,25 +361,15 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
       <SectionCard title="Tratamiento y solicitudes">
         <ChipSelector catalog={catTx} selected={tx} onChange={handleTxChange} />
         <div className="mt-2">
-          <div className="flex items-center justify-between mb-1">
-            <label className="text-xs text-muted">Indicaciones / Posología</label>
-            {txTextoManual && (
-              <button
-                type="button"
-                onClick={() => { setTxTextoManual(false); handleTxChange(tx) }}
-                className="text-xs text-teal hover:underline"
-              >
-                ↺ Regenerar posología
-              </button>
-            )}
-          </div>
-          <textarea
-            name="tx_texto"
-            className={cls}
-            rows={3}
-            value={txTexto}
-            onChange={e => { setTxTexto(e.target.value); setTxTextoManual(true) }}
-          />
+          <Field label="Indicaciones / Posología">
+            <textarea
+              name="tx_texto"
+              className={cls}
+              rows={3}
+              value={txTexto}
+              onChange={e => setTxTexto(e.target.value)}
+            />
+          </Field>
         </div>
         <div className="mt-3">
           <Field label="Pronóstico">
