@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PDFDocument, PDFForm } from 'pdf-lib'
+import { PDFDocument, PDFForm, PDFPage, PDFFont, StandardFonts } from 'pdf-lib'
 import fs from 'fs'
 import path from 'path'
 import { createClient } from '@/lib/supabase/server'
@@ -8,10 +8,16 @@ import { calcAge } from '@/lib/utils'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
+// NOTA: PDFTextField.setFontSize() lanza una excepción silenciosa ("No /DA entry
+// found for field") en campos que no tienen su propio /DA (lo heredan del AcroForm
+// global, que en estos formatos suele ser tamaño 0 = auto). Como queda envuelto en
+// try/catch, el tamaño nunca se aplicaba y pdf-lib autoescalaba el texto al alto
+// completo de la casilla → "letras gigantes". Fix: forzar el /DA del campo
+// directamente con setDefaultAppearance, que sí crea la entrada si no existe.
 function set(form: PDFForm, name: string, value: string | null | undefined, fontSize = 9) {
   try {
     const f = form.getTextField(name)
-    try { f.setFontSize(fontSize) } catch {}
+    try { f.acroField.setDefaultAppearance(`/Helv ${fontSize} Tf 0 g`) } catch {}
     f.setText(value || '')
   } catch {}
 }
@@ -20,6 +26,110 @@ function check(form: PDFForm, name: string, yes: boolean) {
 }
 function radio(form: PDFForm, name: string, value: string) {
   try { form.getRadioGroup(name).select(value) } catch {}
+}
+
+// ── overlay helpers (para PDFs sin AcroForm, ej. AXA y Atlas) ────────────────
+// Coordenadas en sistema "Y desde arriba" (como PyMuPDF), se convierten a la
+// convención de pdf-lib (Y desde abajo) usando la altura de la página.
+
+function ov(page: PDFPage, pageHeight: number, font: PDFFont, text: string | null | undefined, x: number, yTop: number, size = 8) {
+  if (!text) return
+  try { page.drawText(String(text), { x, y: pageHeight - yTop, size, font }) } catch {}
+}
+
+function ovWrap(
+  page: PDFPage, pageHeight: number, font: PDFFont, text: string | null | undefined,
+  x: number, yTop: number, maxWidth: number, size = 8, lineGap = 10, maxLines = 5,
+) {
+  if (!text) return
+  const words = String(text).split(/\s+/).filter(Boolean)
+  const lines: string[] = []
+  let line = ''
+  for (const w of words) {
+    const test = line ? `${line} ${w}` : w
+    if (line && font.widthOfTextAtSize(test, size) > maxWidth) {
+      lines.push(line)
+      if (lines.length >= maxLines) { line = ''; break }
+      line = w
+    } else {
+      line = test
+    }
+  }
+  if (line && lines.length < maxLines) lines.push(line)
+  lines.forEach((l, i) => {
+    try { page.drawText(l, { x, y: pageHeight - yTop - i * lineGap, size, font }) } catch {}
+  })
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ovImage(page: PDFPage, pageHeight: number, img: any, x: number, yTop: number, maxW: number, maxH: number) {
+  if (!img) return
+  try {
+    const scale = Math.min(maxW / img.width, maxH / img.height)
+    const w = img.width * scale
+    const h = img.height * scale
+    page.drawImage(img, { x, y: pageHeight - yTop - h, width: w, height: h })
+  } catch {}
+}
+
+function ovCheck(page: PDFPage, pageHeight: number, font: PDFFont, x0: number, y0: number, x1: number, y1: number, size = 8) {
+  const cx = (x0 + x1) / 2 - size * 0.32
+  const yBaseline = (y0 + y1) / 2 + size * 0.32
+  try { page.drawText('X', { x: cx, y: pageHeight - yBaseline, size, font }) } catch {}
+}
+
+// ── firma del doctor ──────────────────────────────────────────────────────
+// firma_url (Storage de Supabase) nunca se incrustaba como imagen en los
+// formatos de aseguradora — solo se escribía el nombre del médico en el
+// campo de texto bajo la línea de firma. Esto la dibuja arriba de ese campo.
+
+// Si firma_url apunta a una imagen corrupta, doc.embedPng/embedJpg puede quedarse
+// colgado indefinidamente en vez de lanzar error (visto en pruebas) — se agrega
+// un timeout para no tumbar la generación de todo el PDF por una firma dañada.
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    p,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+  ])
+}
+
+async function embedFirma(doc: PDFDocument, url: string | null | undefined) {
+  if (!url) return null
+  try {
+    const res = await withTimeout(fetch(url), 5000)
+    if (!res.ok) return null
+    const bytes = new Uint8Array(await res.arrayBuffer())
+    const isPng = bytes[0] === 0x89 && bytes[1] === 0x50
+    return await withTimeout(isPng ? doc.embedPng(bytes) : doc.embedJpg(bytes), 5000)
+  } catch { return null }
+}
+
+function drawFirmaAboveField(
+  doc: PDFDocument, form: PDFForm, fieldName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  img: any, maxW = 130, maxH = 28,
+) {
+  if (!img) return
+  try {
+    const field = form.getTextField(fieldName)
+    const widget = field.acroField.getWidgets()[0]
+    const rect = widget.getRectangle()
+    let page: PDFPage | null = null
+    for (const p of doc.getPages()) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const annots = (p as any).node.Annots()
+      if (!annots) continue
+      for (let j = 0; j < annots.size(); j++) {
+        if (doc.context.lookup(annots.get(j)) === widget.dict) { page = p; break }
+      }
+      if (page) break
+    }
+    if (!page) return
+    const scale = Math.min(maxW / img.width, maxH / img.height)
+    const w = img.width * scale
+    const h = img.height * scale
+    page.drawImage(img, { x: rect.x, y: rect.y + rect.height + 3, width: w, height: h })
+  } catch {}
 }
 
 /** Split ISO date (YYYY-MM-DD) → { d, m, y2 } — two-digit year */
@@ -132,12 +242,13 @@ export async function GET(
   }
 
   const form = doc.getForm()
+  const firmaImg = await embedFirma(doc, D.firma_url)
 
   // Clear all fields and fix font size
   for (const f of form.getFields()) {
     try {
       if (f.constructor.name === 'PDFTextField') {
-        try { ;(f as any).setFontSize(9) } catch {}
+        try { ;(f as any).acroField.setDefaultAppearance('/Helv 9 Tf 0 g') } catch {}
         ;(f as any).setText('')
       }
       if (f.constructor.name === 'PDFCheckBox') (f as any).uncheck()
@@ -206,6 +317,7 @@ export async function GET(
     check(form, 'P3_15', true)
     set(form, 'P3_57', lugarFecha)
     set(form, 'P3_58', docNombreInv)
+    drawFirmaAboveField(doc, form, 'P3_58', firmaImg)
   }
 
   else if (aseguradora === 'metlife') {
@@ -241,6 +353,9 @@ export async function GET(
     set(form, 'Registro Federal de Contribuyentes_5', D.rfc)
     set(form, 'Correo electrónico_5', D.email_seguros)
     check(form, 'MEDTRAT', true)
+    // "Nombre completo y firma autógrafa del médico tratante" — nunca se llenaba
+    set(form, 'FIRMA', docNombreInv)
+    drawFirmaAboveField(doc, form, 'FIRMA', firmaImg)
   }
 
   else if (aseguradora === 'bbva') {
@@ -287,6 +402,7 @@ export async function GET(
     radio(form, 'tabulador', 'tabsi')
     set(form, '55', docNombreInv)
     set(form, '56', lugarFecha)
+    drawFirmaAboveField(doc, form, '55', firmaImg)
   }
 
   else if (aseguradora === 'mapfre') {
@@ -339,6 +455,7 @@ export async function GET(
     set(form, 'untitled101', D.cedula_prof)
     set(form, 'untitled104', D.cedula_esp)
     set(form, 'untitled139', `${ciudad}, ${estado}`)
+    drawFirmaAboveField(doc, form, 'untitled97', firmaImg)
   }
 
   else if (aseguradora === 'monterrey') {
@@ -398,6 +515,125 @@ export async function GET(
     // Signature
     set(form, 'firmisima p1', docNombreInv)
     set(form, 'firma final',  docNombreInv)
+    drawFirmaAboveField(doc, form, 'firmisima p1', firmaImg)
+    drawFirmaAboveField(doc, form, 'firma final', firmaImg)
+  }
+
+  // AXA y Atlas son PDFs planos sin AcroForm (0 campos) — se escribe el texto
+  // directamente sobre la página en coordenadas fijas, medidas con PyMuPDF
+  // contra el layout real del formato.
+  else if (aseguradora === 'axa') {
+    const helv = await doc.embedFont(StandardFonts.Helvetica)
+    const pages = doc.getPages()
+    const fc1 = split(fcons)
+
+    // ── Página 1: información general ──
+    const p1 = pages[0]
+    const h1 = p1.getHeight()
+    ov(p1, h1, helv, ap1,  112, 251.5)
+    ov(p1, h1, helv, ap2,  298, 251.5)
+    ov(p1, h1, helv, noms, 454, 251.5)
+    ov(p1, h1, helv, edad, 62,  277.0)
+    if (sexo === 'M') ovCheck(p1, h1, helv, 274.2, 278.5, 283.0, 287.2)
+    if (sexo === 'F') ovCheck(p1, h1, helv, 333.8, 278.5, 342.6, 287.2)
+    ovCheck(p1, h1, helv, 32.8, 310.8, 41.6, 319.5)   // Causa de atención: Enfermedad
+    // Antecedentes patológicos (primer renglón de la tabla)
+    ov(p1, h1, helv, '1', 44, 419)
+    ovWrap(p1, h1, helv, dx1 || dx_texto, 120, 419, 140, 8, 9, 2)
+    ov(p1, h1, helv, fmt(fcons), 300, 419)
+    ovWrap(p1, h1, helv, tx_texto, 445, 419, 95, 7, 8, 2)
+    // Antecedentes no patológicos (preguntas con línea en blanco)
+    ov(p1, h1, helv, tabaquismo || 'NEGADO',   85,  584.8, 7)
+    ov(p1, h1, helv, alcohol_val || 'NEGADO',  195, 598.9, 7)
+    ovWrap(p1, h1, helv, patient.drogas ? String(patient.drogas).toUpperCase() : 'NEGADO', 272, 613.1, 260, 7, 8, 1)
+    ovWrap(p1, h1, helv, alergicos, 82, 627.1, 220, 7, 8, 1)
+    // Referido por otro médico
+    if (patient.refiere) {
+      ovCheck(p1, h1, helv, 209.6, 744.1, 218.4, 752.9)
+      ovWrap(p1, h1, helv, String(patient.refiere).toUpperCase(), 426, 756.3, 145, 7, 8, 1)
+    } else {
+      ovCheck(p1, h1, helv, 241.9, 744.1, 250.7, 752.9)
+    }
+
+    // ── Página 2: diagnóstico ──
+    const p2 = pages[1]
+    const h2 = p2.getHeight()
+    ovWrap(p2, h2, helv, padecimiento, 35, 150, 540, 8, 10, 4)
+    ov(p2, h2, helv, fc1.d,  172, 230, 8); ov(p2, h2, helv, fc1.m,  200, 230, 8); ov(p2, h2, helv, fc1.y2, 248, 230, 8)
+    ov(p2, h2, helv, fc1.d,  445, 230, 8); ov(p2, h2, helv, fc1.m,  475, 230, 8); ov(p2, h2, helv, fc1.y2, 518, 230, 8)
+    ovCheck(p2, h2, helv, 292.2, 252.6, 300.9, 261.3)  // Tipo de padecimiento: Crónico
+    ovCheck(p2, h2, helv, 254.4, 341.5, 263.1, 350.2)  // ¿Relación con otro padecimiento? No
+    ovCheck(p2, h2, helv, 101.8, 385.7, 110.6, 394.5)  // ¿Ocasionó incapacidad? No
+    ovWrap(p2, h2, helv, [dx1, dx_texto].filter(Boolean).join(' — '), 35, 428, 540, 8, 10, 4)
+    ovCheck(p2, h2, helv, 395.2, 482.8, 404.0, 491.5)  // ¿Es cáncer? No
+    ovWrap(p2, h2, helv, exploracion, 35, 538, 540, 8, 10, 4)
+    ovWrap(p2, h2, helv, estudios, 35, 618, 540, 8, 10, 4)
+    ovWrap(p2, h2, helv, tx_texto, 35, 712, 540, 8, 10, 2)
+
+    // ── Página 5: datos del médico ──
+    const p5 = pages[4]
+    const h5 = p5.getHeight()
+    ov(p5, h5, helv, 'Médico tratante', 131, 452.5, 7)
+    ovWrap(p5, h5, helv, docNombre, 75, 467.7, 230, 8, 9, 1)
+    ov(p5, h5, helv, D.especialidad, 96, 483.0)
+    ov(p5, h5, helv, D.cedula_prof, 123, 498.3)
+    ov(p5, h5, helv, D.cedula_esp, 141, 514.8)
+    ov(p5, h5, helv, D.rfc, 105, 531.4)
+    ovWrap(p5, h5, helv, hospital, 80, 546.6, 190, 8, 9, 1)
+    ov(p5, h5, helv, tel_cons || D.celular, 78, 561.9)
+    ovWrap(p5, h5, helv, lugarFecha, 455, 730, 110, 7, 8, 2)
+    ovImage(p5, h5, firmaImg, 170, 735, 140, 32)
+  }
+
+  else if (aseguradora === 'atlas') {
+    const helv = await doc.embedFont(StandardFonts.Helvetica)
+    const pages = doc.getPages()
+
+    // ── Página 1: ficha de identificación + historia clínica + padecimiento ──
+    const p1 = pages[0]
+    const h1 = p1.getHeight()
+    ovWrap(p1, h1, helv, nombre, 137, 277.9, 290, 8, 9, 1)
+    ov(p1, h1, helv, fmt(fnac), 436, 293, 7)
+    if (sexo === 'F') ovCheck(p1, h1, helv, 542.5, 280.6, 552.6, 290.6)
+    if (sexo === 'M') ovCheck(p1, h1, helv, 564.2, 280.6, 574.3, 290.6)
+    ovCheck(p1, h1, helv, 173.7, 309.8, 183.7, 319.8)  // Causa de atención: Enfermedad
+    if (patient.refiere) {
+      ovCheck(p1, h1, helv, 333.4, 309.8, 343.4, 319.8)
+      ovWrap(p1, h1, helv, String(patient.refiere).toUpperCase(), 426, 320.6, 150, 7, 8, 1)
+    } else {
+      ovCheck(p1, h1, helv, 368.0, 309.8, 378.0, 319.8)
+    }
+    ovWrap(p1, h1, helv, cronicos, 35, 378, 270, 8, 9, 5)
+    ovWrap(p1, h1, helv, tabaquismo && alcohol_val ? `TABAQUISMO: ${tabaquismo}. ALCOHOL: ${alcohol_val}` : 'INTERROGADOS Y NEGADOS', 350, 378, 230, 8, 9, 5)
+    ovWrap(p1, h1, helv, padecimiento, 33, 635, 540, 7, 8, 1)
+    ov(p1, h1, helv, fmt(fcons), 487, 666, 7)
+    ovWrap(p1, h1, helv, [dx1, dx_texto].filter(Boolean).join(' — '), 78, 695, 420, 8, 9, 4)
+    ov(p1, h1, helv, fmt(fcons), 487, 705, 6)
+    ovCheck(p1, h1, helv, 462.1, 710.8, 474.8, 723.6)  // Tipo de padecimiento: Crónico
+
+    // ── Página 2: tratamiento + exploración + médico tratante ──
+    const p2 = pages[1]
+    const h2 = p2.getHeight()
+    ovCheck(p2, h2, helv, 104.6, 135.1, 114.6, 145.1)  // Tipo de padecimiento: Adquirido
+    ovWrap(p2, h2, helv, tx_texto, 175, 152, 300, 7, 8, 1)
+    ov(p2, h2, helv, fmt(fcons), 487, 152, 7)
+    ovCheck(p2, h2, helv, 88.7, 182.1, 98.7, 192.1)    // ¿Hubo complicaciones? No
+    ovWrap(p2, h2, helv, [exploracion, estudios].filter(Boolean).join(' — '), 33, 300, 540, 8, 10, 4)
+    ovWrap(p2, h2, helv, hospital, 135, 344.4, 100, 7, 8, 2)
+    ovWrap(p2, h2, helv, docNombre, 132, 436.2, 260, 8, 9, 1)
+    ov(p2, h2, helv, D.especialidad, 99, 465.6, 7)
+    ov(p2, h2, helv, D.cedula_prof, 387, 465.8, 7)
+    ov(p2, h2, helv, D.cedula_esp, 395, 482, 7)
+    ovWrap(p2, h2, helv, hospital, 85, 557.6, 450, 8, 9, 1)
+    ov(p2, h2, helv, tel_cons || D.celular, 95, 578.0)
+
+    // ── Página 3: lugar y fecha / firma del médico tratante ──
+    // (línea de firma justo arriba de las leyendas "Lugar y fecha" / "Firma del médico tratante")
+    const p3 = pages[2]
+    const h3 = p3.getHeight()
+    ovWrap(p3, h3, helv, lugarFecha, 123, 618, 260, 7, 8, 1)
+    ovImage(p3, h3, firmaImg, 400, 603, 130, 14)
+    ovWrap(p3, h3, helv, docNombre, 395, 619, 180, 6, 7, 1)
   }
 
   try {
