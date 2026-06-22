@@ -258,63 +258,65 @@ export async function GET(
   // ── per-insurance fill ────────────────────────────────────────────────────
 
   if (aseguradora === 'gnp') {
-    // Patient — page 1
+    // Plantilla GNP actualizada (jun-2026) — la numeración de campos cambió por
+    // completo respecto a la versión anterior: las fechas dejaron de estar
+    // divididas en día/mes/año por separado (ahora un solo campo "dd/mm/aa"),
+    // y varios checkboxes se recorrieron de posición. Mapeo verificado contra
+    // las coordenadas reales de cada widget en el PDF nuevo.
+    const fc1 = split(fcons)
+    const fechaCorta = `${fc1.d}/${fc1.m}/${fc1.y2}`
+
+    // Trámite
+    check(form, 'P1_1', true)   // Reembolso (default)
+
+    // Ficha de identificación — page 1
     set(form, 'P1_8',  ap1)
     set(form, 'P1_9',  ap2)
     set(form, 'P1_10', noms)
     check(form, 'P1_11', sexo === 'F')   // Femenino
     check(form, 'P1_12', sexo === 'M')   // Masculino
     set(form, 'P1_13', edad)
-    check(form, 'P1_14', true)           // Enfermedad (default)
-    // date of first symptoms ≈ consultation date
-    const fc1 = split(fcons)
-    set(form, 'P1_21',   fc1.d)
-    set(form, 'P1_21_1', fc1.m)
-    set(form, 'P1_21_2', fc1.y2)
-    // diagnosis date ≈ same as consultation
-    set(form, 'P1_23',   fc1.d)
-    set(form, 'P1_23_1', fc1.m)
-    set(form, 'P1_23_2', fc1.y2)
+    check(form, 'P1_15', true)           // Causa de atención: Enfermedad (default)
 
     set(form, 'P1_17', cronicos || 'INTERROGADOS Y NEGADOS')
     set(form, 'P1_18', tabaquismo && alcohol_val ? `TABAQUISMO: ${tabaquismo}. ALCOHOL: ${alcohol_val}` : 'INTERROGADOS Y NEGADOS')
     set(form, 'P1_19', gineco)
     set(form, 'P1_20', 'NO APLICA')
+    set(form, 'P1_21', fechaCorta)        // Fecha de inicio (padecimiento)
     set(form, 'P1_22', padecimiento)
+    set(form, 'P1_23', fechaCorta)        // Fecha de diagnóstico
     set(form, 'P1_24', dx1 || dx_texto)
-    check(form, 'P1_27', true)   // crónico (default checked same as sample)
+    check(form, 'P1_28', true)            // Tipo de padecimiento: Crónico (default)
+    check(form, 'P1_30', true)            // ¿Relación con otro padecimiento? No
 
-    // Vitals — page 2
-    set(form, 'P2_1', fc)
-    set(form, 'P2_2', fr)
-    set(form, 'P2_3', temp)
-    set(form, 'P2_4', ta)
+    // Historia clínica continuación — page 2
+    set(form, 'P2_1', fc)    // Pulso
+    set(form, 'P2_2', fr)    // Respiración
+    set(form, 'P2_3', temp)  // Temperatura
+    set(form, 'P2_4', ta)    // Presión arterial
     set(form, 'P2_7', exploracion)
     set(form, 'P2_8', estudios || exploracion)
-    check(form, 'P2_11', true)  // tratamiento médico
-    // treatment date
-    set(form, 'P2_13',   fc1.d)
-    set(form, 'P2_13_1', fc1.m)
-    set(form, 'P2_13_2', fc1.y2)
+    check(form, 'P2_11', true)   // Complicaciones: No
+    set(form, 'P2_13', fechaCorta)   // Fecha de inicio (tratamiento)
     set(form, 'P2_14', tx_texto)
     set(form, 'P2_17', hospital)
     set(form, 'P2_18', ciudad)
     set(form, 'P2_19', estado)
-    check(form, 'P2_21', true)  // hospitalización
+    check(form, 'P2_21', true)   // Tipo de estancia: Hospitalaria
+    set(form, 'P2_23', fechaCorta)   // Fecha de ingreso
 
-    // Doctor — page 3
+    // Datos del médico tratante — page 3
     set(form, 'P3_1', D.apellido1)
     set(form, 'P3_2', D.apellido2)
     set(form, 'P3_3', D.nombres)
     set(form, 'P3_4', D.especialidad)
     set(form, 'P3_5', D.cedula_prof)
     set(form, 'P3_6', D.cedula_esp)
-    check(form, 'P3_8', true)   // médico tratante
-    check(form, 'P3_9', true)
     set(form, 'P3_12', tel_cons || D.celular)
     set(form, 'P3_13', D.celular)
     set(form, 'P3_14', D.email_seguros)
-    check(form, 'P3_15', true)
+    check(form, 'P3_15', true)   // Tipo de participación: Tratante
+    check(form, 'P3_19', true)  // ¿Hubo interconsulta? No
     set(form, 'P3_57', lugarFecha)
     set(form, 'P3_58', docNombreInv)
     drawFirmaAboveField(doc, form, 'P3_58', firmaImg)
