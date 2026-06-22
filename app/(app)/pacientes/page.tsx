@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { calcAge, initials, formatDate } from '@/lib/utils'
+import { calcAge, initials, formatDate, normalizeText } from '@/lib/utils'
 import { SearchBar } from './SearchBar'
 import { SortSelect } from './SortSelect'
 import QuickUploadFab from './QuickUploadFab'
@@ -22,20 +22,21 @@ export default async function PacientesPage({
   const { column, ascending } = SORTS[sortKey]
   const supabase = await createClient()
 
-  let query = supabase
+  const query = supabase
     .from('patients')
     .select('id, nombre, sexo, fecha_nacimiento, fecha_consulta, dx, ciudad')
     .eq('archived', false)
+    .order(column, { ascending, nullsFirst: false })
 
-  if (q?.trim()) {
-    query = query.ilike('nombre', `%${q.trim()}%`)
-  }
-  query = query.order(column, { ascending, nullsFirst: false })
-
-  const [{ data: patients }, { data: attachRows }] = await Promise.all([
+  const [{ data: allPatients }, { data: attachRows }] = await Promise.all([
     query,
     supabase.from('attachments').select('patient_id'),
   ])
+
+  const qNorm = q?.trim() ? normalizeText(q.trim()) : ''
+  const patients = qNorm
+    ? (allPatients ?? []).filter(p => normalizeText(p.nombre).includes(qNorm))
+    : allPatients
 
   const countMap = (attachRows ?? []).reduce<Record<string, number>>((acc, { patient_id }) => {
     acc[patient_id] = (acc[patient_id] ?? 0) + 1

@@ -1,3 +1,10 @@
+export function normalizeText(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+}
+
 export function calcAge(dateStr: string | null | undefined): string {
   if (!dateStr) return '—'
   const d = new Date(dateStr)
