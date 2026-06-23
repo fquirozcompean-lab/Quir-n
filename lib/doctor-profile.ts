@@ -29,5 +29,9 @@ export const getDoctorProfile = cache(async (): Promise<DoctorProfile | null> =>
     .eq('user_id', user.id)
     .single()
 
-  return (data as DoctorProfile | null) ?? null
+  const profile = (data as DoctorProfile | null) ?? null
+  if (profile?.cat_tx) {
+    profile.cat_tx = [...profile.cat_tx].sort((a, b) => a.localeCompare(b, 'es'))
+  }
+  return profile
 })
