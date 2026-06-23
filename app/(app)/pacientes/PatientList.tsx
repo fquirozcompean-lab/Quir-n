@@ -46,7 +46,7 @@ export function PatientList({
         onClick={toggle}
         className="w-full flex items-center justify-center gap-2 bg-teal-light text-navy text-sm font-semibold py-2.5 rounded-xl mb-3 hover:bg-border transition-colors"
       >
-        {hidden ? '👁 Mostrar expedientes' : '🙈 Ocultar expedientes'}
+        {hidden ? '👁 Mostrar expedientes' : '🔒 Ocultar expedientes'}
       </button>
 
       {hidden ? (
