@@ -369,6 +369,7 @@ export default async function PatientDetailPage({
                   </div>
                 </div>
                 {c.motivo && <p className="text-xs text-muted mb-1">{c.motivo}</p>}
+                {c.padecimiento && <p className="text-xs text-gray-700 mb-1.5 whitespace-pre-line">{c.padecimiento}</p>}
                 {c.signos_vitales && (
                   <div className="flex flex-wrap gap-1.5 mb-1.5">
                     {c.signos_vitales.ta   && <span className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded font-mono">T/A {c.signos_vitales.ta}</span>}
