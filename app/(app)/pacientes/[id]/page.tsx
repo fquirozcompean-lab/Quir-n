@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { calcAge, initials, formatDate } from '@/lib/utils'
 import { SharePrescription } from './SharePrescription'
+import { QuickPrescription } from './QuickPrescription'
 import { getDoctorProfile } from '@/lib/doctor-profile'
 import DeletePatientButton from './DeletePatientButton'
 
@@ -163,6 +164,9 @@ export default async function PatientDetailPage({
           </Link>
         </div>
       </div>
+
+      {/* ── Generar receta rápida ── */}
+      <QuickPrescription patientId={id} catEst={profile?.cat_est ?? []} />
 
       {/* ── Datos generales ── */}
       <SectionBlock title="Datos generales">
