@@ -79,6 +79,11 @@ export default async function RecetaPage({
           .no-print { display: none !important; }
           body { background: white !important; }
           .rx-page { box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
         }
       `}</style>
 

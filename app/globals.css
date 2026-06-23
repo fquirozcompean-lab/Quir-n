@@ -23,3 +23,14 @@ body {
   color: #1f2a37;
   font-family: var(--font-sans);
 }
+
+/* Los navegadores omiten colores/fondos al imprimir o exportar a PDF salvo
+   que se indique explícitamente — sin esto, las vistas imprimibles (recetas,
+   expedientes) salen en blanco y negro. */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}
