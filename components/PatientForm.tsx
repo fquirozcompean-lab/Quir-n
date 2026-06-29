@@ -6,6 +6,7 @@ import { ChipSelector } from './ChipSelector'
 import { calcAge } from '@/lib/utils'
 import { findSimilarPatients } from '@/app/(app)/pacientes/actions'
 import type { Patient, Consultorio } from '@/lib/types'
+import InlineAttachmentUploader, { type AttachmentItem } from './InlineAttachmentUploader'
 
 type ActionState = { error: string } | undefined
 type PatientAction = (prev: ActionState, formData: FormData) => Promise<ActionState>
@@ -19,6 +20,8 @@ interface PatientFormProps {
   catEst: string[]
   catPosologia: Record<string, string>
   consultorios: Record<string, Consultorio>
+  patientId?: string
+  initialAttachments?: AttachmentItem[]
 }
 
 const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
@@ -50,7 +53,7 @@ function defaultExp(sexo: string) {
   return ''
 }
 
-export default function PatientForm({ initialData, action, cancelHref = '/pacientes', catDx, catTx, catEst, catPosologia, consultorios }: PatientFormProps) {
+export default function PatientForm({ initialData, action, cancelHref = '/pacientes', catDx, catTx, catEst, catPosologia, consultorios, patientId, initialAttachments }: PatientFormProps) {
   const [state, formAction, pending] = useActionState(action, undefined)
   const [sexo, setSexo] = useState(initialData?.sexo ?? '')
   const [fnac, setFnac] = useState(initialData?.fecha_nacimiento ?? '')
@@ -95,7 +98,8 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
   }
 
   return (
-    <form action={formAction} className="space-y-3 pb-10">
+    <div className="space-y-4 pb-10">
+    <form action={formAction} className="space-y-3">
       {isEdit && <input type="hidden" name="id" value={initialData.id} />}
       <input type="hidden" name="dx" value={JSON.stringify(dx)} />
       <input type="hidden" name="tx" value={JSON.stringify(tx)} />
@@ -407,5 +411,9 @@ export default function PatientForm({ initialData, action, cancelHref = '/pacien
         </Link>
       </div>
     </form>
+    {patientId && (
+      <InlineAttachmentUploader patientId={patientId} initialAttachments={initialAttachments} />
+    )}
+    </div>
   )
 }

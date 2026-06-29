@@ -14,14 +14,22 @@ export default async function EditConsultaPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: patient }, { data: consulta }, profile] = await Promise.all([
+  const [{ data: patient }, { data: consulta }, { data: rawAttachments }, profile] = await Promise.all([
     supabase
       .from('patients')
       .select('nombre, consultorio, fecha_nacimiento, sexo, ciudad, cronicos, quirurgicos, alergicos, medicamentos, padecimiento, exploracion, analisis, dx, dx_texto, tx, tx_texto')
       .eq('id', id).eq('user_id', user!.id).single(),
     supabase.from('consultations').select('*').eq('id', consultaId).eq('user_id', user!.id).single(),
+    supabase.from('attachments').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
     getDoctorProfile(),
   ])
+
+  const initialAttachments = await Promise.all(
+    (rawAttachments ?? []).map(async (att) => {
+      const { data } = await supabase.storage.from('estudios').createSignedUrl(att.storage_path, 3600)
+      return { id: att.id, nombre_archivo: att.nombre_archivo, tipo: att.tipo, url: data?.signedUrl ?? '' }
+    })
+  )
 
   if (!patient || !consulta) notFound()
 
@@ -77,6 +85,7 @@ export default async function EditConsultaPage({
           pronostico:         consulta.pronostico,
           signos_vitales:     consulta.signos_vitales,
         }}
+        initialAttachments={initialAttachments}
       />
     </div>
   )

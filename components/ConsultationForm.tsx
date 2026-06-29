@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ChipSelector } from './ChipSelector'
 import HistoriaClinicaPanel, { type HistoriaClinicaData } from './HistoriaClinicaPanel'
 import type { Consultorio } from '@/lib/types'
+import InlineAttachmentUploader, { type AttachmentItem } from './InlineAttachmentUploader'
 
 type ActionState = { error: string } | undefined
 type ConsultAction = (prev: ActionState, formData: FormData) => Promise<ActionState>
@@ -30,6 +31,7 @@ interface Props {
   catEst: string[]
   consultorios: Record<string, Consultorio>
   historiaClinica?: HistoriaClinicaData
+  initialAttachments?: AttachmentItem[]
 }
 
 const cls = 'w-full text-sm px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white'
@@ -69,7 +71,7 @@ function VitalField({ name, label, defaultValue: dv, unit }: { name: string; lab
 const EXP_F = 'A la exploración física se encuentra paciente alerta, orientada, cooperadora, adecuado estado de hidratación y coloración de tegumentos, cardiopulmonar sin alteraciones, abdomen globoso a expensas de panículo adiposo, blando, depresible, no doloroso a la palpación, sin datos de irritación peritoneal, extremidades integras sin alteraciones.'
 const EXP_M = 'A la exploración física se encuentra paciente alerta, orientado, cooperador, adecuado estado de hidratación y coloración de tegumentos, cardiopulmonar sin alteraciones, abdomen globoso a expensas de panículo adiposo, blando, depresible, no doloroso a la palpación, sin datos de irritación peritoneal, extremidades integras sin alteraciones.'
 
-export default function ConsultationForm({ patientId, patientName, defaultConsultorio, action, initialData, isEdit, catDx, catTx, catEst, consultorios, historiaClinica }: Props) {
+export default function ConsultationForm({ patientId, patientName, defaultConsultorio, action, initialData, isEdit, catDx, catTx, catEst, consultorios, historiaClinica, initialAttachments }: Props) {
   const [state, formAction, pending] = useActionState(action, undefined)
   const [dx, setDx]             = useState<string[]>(initialData?.dx ?? [])
   const [tx, setTx]             = useState<string[]>(initialData?.tx ?? [])
@@ -92,7 +94,8 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
   }
 
   return (
-    <form action={formAction} className="space-y-3 pb-10">
+    <div className="space-y-4 pb-10">
+    <form action={formAction} className="space-y-3">
       <input type="hidden" name="patient_id" value={patientId} />
       <input type="hidden" name="dx" value={JSON.stringify(dx)} />
       <input type="hidden" name="tx" value={JSON.stringify(tx)} />
@@ -231,5 +234,7 @@ export default function ConsultationForm({ patientId, patientName, defaultConsul
         </Link>
       </div>
     </form>
+    <InlineAttachmentUploader patientId={patientId} initialAttachments={initialAttachments} />
+    </div>
   )
 }

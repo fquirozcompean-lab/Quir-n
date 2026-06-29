@@ -14,10 +14,18 @@ export default async function EditarPacientePage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: patient }, profile] = await Promise.all([
+  const [{ data: patient }, { data: rawAttachments }, profile] = await Promise.all([
     supabase.from('patients').select('*').eq('id', id).eq('user_id', user!.id).single(),
+    supabase.from('attachments').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
     getDoctorProfile(),
   ])
+
+  const initialAttachments = await Promise.all(
+    (rawAttachments ?? []).map(async (att) => {
+      const { data } = await supabase.storage.from('estudios').createSignedUrl(att.storage_path, 3600)
+      return { id: att.id, nombre_archivo: att.nombre_archivo, tipo: att.tipo, url: data?.signedUrl ?? '' }
+    })
+  )
 
   if (!patient) notFound()
 
@@ -38,6 +46,8 @@ export default async function EditarPacientePage({
         catEst={profile?.cat_est ?? []}
         catPosologia={profile?.cat_posologia ?? {}}
         consultorios={profile?.consultorios ?? {}}
+        patientId={id}
+        initialAttachments={initialAttachments}
       />
     </>
   )
