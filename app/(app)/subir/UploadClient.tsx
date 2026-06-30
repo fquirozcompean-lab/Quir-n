@@ -255,7 +255,7 @@ export default function UploadClient({
 
     if (uploadError) {
       setStatus('error')
-      setMessage('Error al subir el archivo. Intenta de nuevo.')
+      setMessage(`Error al subir el archivo: ${uploadError.message}`)
       return
     }
 

@@ -42,7 +42,7 @@ export default function InlineAttachmentUploader({
 
     const { error: uploadError } = await supabase.storage.from('estudios').upload(storagePath, file)
     if (uploadError) {
-      setError('Error al subir el archivo. Intenta de nuevo.')
+      setError(`Error de almacenamiento: ${uploadError.message}`)
       setUploading(false)
       if (fileRef.current) fileRef.current.value = ''
       return
