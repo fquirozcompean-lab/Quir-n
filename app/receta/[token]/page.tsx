@@ -1,8 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import type { Consultorio } from '@/lib/types'
 import PrintButton from './PrintButton'
+
+export const viewport: Viewport = { colorScheme: 'light' }
 
 interface PrescriptionView {
   fecha: string
@@ -75,6 +77,8 @@ export default async function RecetaPage({
   return (
     <>
       <style>{`
+        :root { color-scheme: light !important; }
+        html, body { background-color: #e0f2f2; }
         @media print {
           .no-print { display: none !important; }
           body { background: white !important; }
