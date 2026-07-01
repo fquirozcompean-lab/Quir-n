@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from 'next'
 import type { Consultorio } from '@/lib/types'
 import PrintButton from './PrintButton'
 
-export const viewport: Viewport = { colorScheme: 'light' }
+export const viewport: Viewport = { colorScheme: 'only light', width: 'device-width', initialScale: 1 }
 
 interface PrescriptionView {
   fecha: string
@@ -77,8 +77,11 @@ export default async function RecetaPage({
   return (
     <>
       <style>{`
-        :root { color-scheme: light !important; }
-        html, body { background-color: #e0f2f2; }
+        :root, html, body { color-scheme: only light !important; }
+        html, body { background-color: #e0f2f2; forced-color-adjust: none; }
+        @media (prefers-color-scheme: dark) {
+          html, body { background-color: #e0f2f2 !important; color: #1f2a37 !important; }
+        }
         @media print {
           .no-print { display: none !important; }
           body { background: white !important; }
