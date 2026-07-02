@@ -9,7 +9,7 @@ export function CatalogEditor({ name, initial, placeholder }: { name: string; in
   function add() {
     const val = draft.trim()
     if (!val || items.includes(val)) return
-    setItems([...items, val])
+    setItems([...items, val].sort((a, b) => a.localeCompare(b, 'es')))
     setDraft('')
   }
   function remove(item: string) {
